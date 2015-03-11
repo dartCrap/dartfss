@@ -5,6 +5,8 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import com.dartcrap.datafeed.util.Scrappable;
 
 public class DartReportDocumnetHeader implements Scrappable{
+	// SmallChange
+	
 	private String rcpNo;
 	private String dcmNo;
 	private int dcmSize;
