@@ -1,4 +1,4 @@
-package com.dartcrap.entity;
+package com.dartcrap.reports;
 
 
 /**

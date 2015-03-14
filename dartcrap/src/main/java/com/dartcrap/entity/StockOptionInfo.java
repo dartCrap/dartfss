@@ -4,10 +4,9 @@
 package com.dartcrap.entity;
 
 /**
- * @author Gi
- *
+ * depleted....
  */
-public class StockOptionInfo extends GenericDartInfo{
+public class StockOptionInfo /*extends GenericDartInfo*/{
 	private String strikeDate;
 	private String stockOptionHolderName;
 	private String relationToCompany;

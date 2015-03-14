@@ -15,7 +15,7 @@ public class DartCrapSettings {
 	public final static int DEFAULT_TIME_OUT = 100000;
 	
 	
-	public final static String VIEW_DOC_MATCHER = "javascript: viewDoc\\('@@RCP_NO@@', '([0-9]*)', null, null, null, '(.*)'"
+	public final static String VIEW_DOC_MATCHER = "javascript: viewDoc\\('@@RCP_NO@@', '([0-9]*)', null, null, null, '(.*)'";
 	private static volatile DartCrapSettings instance = null;
 	private DartCrapSettings(){}
 }

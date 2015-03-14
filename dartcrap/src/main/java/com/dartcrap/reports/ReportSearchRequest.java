@@ -1,7 +1,9 @@
-package com.dartcrap;
+package com.dartcrap.reports;
 
 import java.util.ArrayList;
 import java.util.List;
+
+
 
 
 
@@ -19,7 +21,7 @@ import com.dartcrap.util.DartCrapSettings;
  *
  */
 public class ReportSearchRequest {
-	private static Logger log = LoggerFactory.getLogger( IndexAndSearchTest.class );
+	private static Logger log = LoggerFactory.getLogger( ReportSearchRequest.class );
 	
 	private String auth;		// Authentification key issued by FSS. Valid for one year. Needed to be updated on regular basis.
 	private String crpCd="";		// Company ID. Could be common stock ID (6-digit) or corporate ID number (8-digit)

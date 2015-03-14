@@ -26,7 +26,13 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.dartcrap.entity.ReportHeader;
+import com.dartcrap.Book;
+import com.dartcrap.extractor.ExtractorDispatcher;
+import com.dartcrap.extractor.InfoExtractor;
+import com.dartcrap.reports.ReportHeader;
+import com.dartcrap.reports.ReportSearchRequest;
+import com.dartcrap.reports.ReportSearchResponse;
+import com.dartcrap.reports.ReportWebDocFactory;
 
 
 
@@ -40,7 +46,7 @@ public class LoadAndDispatchTest {
 
 	private EntityManager em;
 
-	private static Logger log = LoggerFactory.getLogger( IndexAndSearchTest.class );
+	private static Logger log = LoggerFactory.getLogger( LoadAndDispatchTest.class );
 	
 	private java.util.Properties properties;
 
@@ -79,10 +85,15 @@ public class LoadAndDispatchTest {
 		
 		ReportSearchResponse searchResult = listRequest.send();
 		
+		int i = 1;
 		for (ReportHeader header: searchResult.extractReportHeaders()){
-			ReportWebDocFactory.loadHttpReportWebDoc(header.getRcpNo())
-					.storeFile();
-			break; // test...
+			InfoExtractor extractor = ExtractorDispatcher.getInstance()
+										.dispatch(
+												ReportWebDocFactory
+												.loadAndStoreReportWebDoc(header)
+												);
+			log.info("Result: " + extractor.extract());
+			if (i++ > 7) break; // I'd like to test first 7 reports only.
 		}
 
 		

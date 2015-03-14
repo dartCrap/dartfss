@@ -1,5 +1,11 @@
 package com.dartcrap.extractor;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.dartcrap.reports.ReportSearchRequest;
+import com.dartcrap.reports.ReportWebDoc;
+
 /**
  * 
  * @author Gi
@@ -7,22 +13,48 @@ package com.dartcrap.extractor;
  */
 
 public class ExtractorDispatcher {
-	private int queued;
-	private int dispatched;
-	private int failed;
+	private static Logger log = LoggerFactory.getLogger( ExtractorDispatcher.class );
+	private static volatile ExtractorDispatcher instance= null; // Singleton
+	
+	/*
+	 * 
+	 */
+	private StockOptionInfoExtractor stockOptionInfoExtractor;
+
+	
+	
+	public static ExtractorDispatcher getInstance(){
+		synchronized (ExtractorDispatcher.class){
+			if (instance == null){
+				log.info("Initialize...");
+				instance = new ExtractorDispatcher();
+			}
+		}
+		return instance;
+	}
+	
 	
 	/**
 	 * TO-DO 
 	 */
-	
-	public ExtractorDispatcher loadBatch(){
-		return this;
+	private ExtractorDispatcher(){
+		this.stockOptionInfoExtractor = new StockOptionInfoExtractor();
 	}
 	
 	/**
 	 * TO-DO....best effort....
 	 */
-	public void dispatch(){
+	public InfoExtractor dispatch(ReportWebDoc report){
 		
+		if (report.getHeader().getRptNm().endsWith("주식매수선택권부여에관한신고")){
+			this.stockOptionInfoExtractor.setDoc(report);
+			log.info ("Report "+report.getHeader().getRcpDt() 
+					+ " " + report.getHeader().getCrpNm()
+					+ " " + report.getHeader().getRptNm()
+					+ "==>" + this.stockOptionInfoExtractor.getClass().getName());
+		} else if (true){
+			
+		}
+		return this.stockOptionInfoExtractor;
 	}
 }

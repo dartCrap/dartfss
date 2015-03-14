@@ -1,4 +1,4 @@
-package com.dartcrap;
+package com.dartcrap.reports;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -9,7 +9,6 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.dartcrap.entity.ReportHeader;
 import com.mysql.jdbc.log.Log;
 
 import org.slf4j.Logger;
@@ -21,7 +20,7 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class ReportSearchResponse {
-	private static Logger log = LoggerFactory.getLogger( IndexAndSearchTest.class );
+	private static Logger log = LoggerFactory.getLogger( ReportSearchResponse.class );
 
 	private List<Document> searchResponseXml;		// XML response from "http://dart.fss.or.kr/api/search.xml?"
 
