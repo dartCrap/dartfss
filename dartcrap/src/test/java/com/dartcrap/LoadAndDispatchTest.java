@@ -73,6 +73,11 @@ public class LoadAndDispatchTest {
 	@Test
 	public void testReportLoad() throws Exception {
 		
+		System.setProperty("http.proxyHost", "167.114.97.18");
+		System.setProperty("http.proxyPort", "3128");
+		System.setProperty("https.proxyHost", "167.114.97.18");
+		System.setProperty("https.proxyPort", "3128");		
+		
 		ReportSearchRequest listRequest = new ReportSearchRequest()
 											.setAuth(properties.getProperty("auth"))
 											.setBsnDp("E004")		// Stock Option
