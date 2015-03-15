@@ -1,7 +1,7 @@
-package com.dartcrap.extractor;
+package com.dartcrab.extractor;
 
-import com.dartcrap.entity.GenericDartInfo;
-import com.dartcrap.reports.ReportWebDoc;
+import com.dartcrab.entities.GenericDartInfo;
+import com.dartcrab.reports.ReportWebDoc;
 
 public abstract class InfoExtractor {
 	private ReportWebDoc	doc;

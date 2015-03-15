@@ -1,4 +1,4 @@
-package com.dartcrap.util;
+package com.dartcrab.util;
 
 /**
  * TO-DO
@@ -6,7 +6,7 @@ package com.dartcrap.util;
  * @author Gi
  *
  */
-public class DartCrapSettings {
+public class DartCrabSettings {
 	public final static String API_URL = "http://dart.fss.or.kr/api/search.xml";
 	public final static String REPORT_URL = "http://dart.fss.or.kr/dsaf001/main.do";
 	public final static String REPORT_VIEW_URL = "https://dart.fss.or.kr/report/viewer.do";
@@ -16,6 +16,6 @@ public class DartCrapSettings {
 	
 	
 	public final static String VIEW_DOC_MATCHER = "javascript: viewDoc\\('@@RCP_NO@@', '([0-9]*)', null, null, null, '(.*)'";
-	private static volatile DartCrapSettings instance = null;
-	private DartCrapSettings(){}
+	private static volatile DartCrabSettings instance = null;
+	private DartCrabSettings(){}
 }

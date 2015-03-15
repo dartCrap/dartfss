@@ -1,7 +1,8 @@
-package com.dartcrap.reports;
+package com.dartcrab.reports;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 
 
@@ -13,7 +14,7 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.dartcrap.util.DartCrapSettings;
+import com.dartcrab.util.DartCrabSettings;
 
 /**
  * 
@@ -44,7 +45,7 @@ public class ReportSearchRequest {
 	 * TO-DO: send an XML OpenAPI request to http://dart.fss.or.kr. Retrive reponse
 	 */
 	public ReportSearchResponse send() throws Exception {
-		String reqBase = DartCrapSettings.API_URL + "?auth="+auth
+		String reqBase = DartCrabSettings.API_URL + "?auth="+auth
 				+"&crp_cd=" + crpCd
 				+"&start_dt=" + startDt + "&end_dt=" + endDt 
 				+ "&fin_rpt=" + finRpt 
@@ -58,7 +59,7 @@ public class ReportSearchRequest {
 			String req = reqBase + "&page_set="+pageSize+"&page_no="+page;
 			log.info("Sending request: "+req);
 			Document doc = Jsoup.connect(req)
-								.userAgent(DartCrapSettings.USER_AGENT)
+								.userAgent(DartCrabSettings.USER_AGENT)
 								.timeout(timeout)
 								.get(); // get the first page
 			

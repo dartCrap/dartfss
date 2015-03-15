@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.dartcrap.entity;
+package com.dartcrab.entities;
 
 /**
  * depleted....

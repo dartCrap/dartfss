@@ -1,9 +1,9 @@
-package com.dartcrap.entity;
+package com.dartcrab.entities;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import com.dartcrap.reports.ReportHeader;
+import com.dartcrab.reports.ReportHeader;
 
 public class GenericDartInfo{
 	private ReportHeader	header;
@@ -19,7 +19,7 @@ public class GenericDartInfo{
 	 * @param key
 	 * @param value
 	 */
-	public GenericDartInfo add(String key, String value){
+	public GenericDartInfo addInfo(String key, String value){
 		map.put(key, value);
 		return this;
 	}

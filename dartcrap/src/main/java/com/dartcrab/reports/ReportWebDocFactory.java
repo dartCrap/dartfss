@@ -1,4 +1,4 @@
-package com.dartcrap.reports;
+package com.dartcrab.reports;
 
 import java.io.File;
 import java.nio.charset.StandardCharsets;
@@ -13,7 +13,7 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.dartcrap.util.DartCrapSettings;
+import com.dartcrab.util.DartCrabSettings;
 
 /**
  * 
@@ -30,14 +30,14 @@ public class ReportWebDocFactory {
 		ReportWebDoc report = null;
 		
 		try{
-				Document doc = Jsoup.connect(DartCrapSettings.REPORT_URL
+				Document doc = Jsoup.connect(DartCrabSettings.REPORT_URL
 					+"?rcpNo="+ header.getRcpNo())
-					.userAgent(DartCrapSettings.USER_AGENT)
+					.userAgent(DartCrabSettings.USER_AGENT)
 					.get();
 				
 				Elements	viewdocScript = doc.getElementsByTag("script"); // Retrieve javascript only
 				
-				Pattern		viewdocPattern = Pattern.compile(DartCrapSettings.VIEW_DOC_MATCHER.replace("@@RCP_NO@@", header.getRcpNo()),Pattern.MULTILINE);
+				Pattern		viewdocPattern = Pattern.compile(DartCrabSettings.VIEW_DOC_MATCHER.replace("@@RCP_NO@@", header.getRcpNo()),Pattern.MULTILINE);
 				Matcher		viewdocMatcher = viewdocPattern.matcher(viewdocScript.toString());
 	
 				log.info("Fetch a repot with rcp_no " + header.getRcpNo() + "-->" 
@@ -45,15 +45,15 @@ public class ReportWebDocFactory {
 							+", dcmNo = " + viewdocMatcher.group(1)
 							+", dtd = " + viewdocMatcher.group(2));
 				
-				String reportViewRequest = DartCrapSettings.REPORT_VIEW_URL 
+				String reportViewRequest = DartCrabSettings.REPORT_VIEW_URL 
 									+ "?rcpNo=" + header.getRcpNo()
 									+ "&dcmNo=" + viewdocMatcher.group(1)
 									+ "&eleId=1&offset=0&length=0" // default
 									+ "&dtd=" + viewdocMatcher.group(2);
 				report = new ReportWebDoc(header,
 							Jsoup.connect(reportViewRequest)
-								.userAgent(DartCrapSettings.USER_AGENT)
-								.timeout(DartCrapSettings.DEFAULT_TIME_OUT) // --> to be changed
+								.userAgent(DartCrabSettings.USER_AGENT)
+								.timeout(DartCrabSettings.DEFAULT_TIME_OUT) // --> to be changed
 								.get()
 								.html().toString()
 								);

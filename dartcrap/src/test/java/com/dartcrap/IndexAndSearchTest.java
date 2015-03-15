@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
 import org.hibernate.search.jpa.FullTextEntityManager;
 import org.hibernate.search.jpa.FullTextQuery;
 
-import com.dartcrap.Book;
+import com.dartcrab.Book;
 
 import static org.junit.Assert.assertEquals;
 
