@@ -57,7 +57,8 @@ public class LoadAndDispatchTest {
 		
 		try{ 
 			this.properties = new java.util.Properties();
-			FileInputStream in = new FileInputStream("src/main/resources/dartcrap.properties");
+			FileInputStream in = new FileInputStream("src/main/resources"
+					+ "/dartcrap.properties");
 			this.properties.load(in);
 			in.close();
 		} catch (Exception e){
@@ -73,17 +74,17 @@ public class LoadAndDispatchTest {
 	@Test
 	public void testReportLoad() throws Exception {
 		
-		System.setProperty("http.proxyHost", "167.114.97.18");
-		System.setProperty("http.proxyPort", "3128");
-		System.setProperty("https.proxyHost", "167.114.97.18");
-		System.setProperty("https.proxyPort", "3128");		
+		/*System.setProperty("http.proxyHost", "104.223.3.223");
+		System.setProperty("http.proxyPort", "7808");
+		System.setProperty("https.proxyHost", "104.223.3.223");
+		System.setProperty("https.proxyPort", "7808");*/		
 		
 		ReportSearchRequest listRequest = new ReportSearchRequest()
 											.setAuth(properties.getProperty("auth"))
-											.setBsnDp("E004")		// Stock Option
-											.setCrpCd("")			// any company...
-											.setStartDt("20150101")			
-											.setEndDt("")			// not specified
+											.setBsnDp("I001")		// 수시공시 (주식매수선택권 행사 포함)
+											.setCrpCd("053300")			// 
+											.setStartDt("20150303")			//
+											.setEndDt("20150303")			// not specified
 											;
 		
 		log.info("Request: " + listRequest);
@@ -91,14 +92,18 @@ public class LoadAndDispatchTest {
 		ReportSearchResponse searchResult = listRequest.send();
 		
 		int i = 1;
+		InfoExtractor extractor = null;
+		
 		for (ReportHeader header: searchResult.extractReportHeaders()){
-			InfoExtractor extractor = ExtractorDispatcher.getInstance()
-										.dispatch(
-												ReportWebDocFactory
-												.loadAndStoreReportWebDoc(header)
-												);
-			log.info("Result: " + extractor.extract());
-			if (i++ > 7) break; // I'd like to test first 7 reports only.
+			if (header.getRptNm().equals("주식매수선택권행사"))
+					extractor = ExtractorDispatcher.getInstance()
+								.dispatch(
+										ReportWebDocFactory
+										.loadAndStoreReportWebDoc(header)
+										);
+			if (extractor != null) log.info("Result: " + extractor.extract());
+			if (i++ > 20) break; // I'd like to test first 20 reports only.
+			
 		}
 
 		

@@ -12,6 +12,8 @@ public class DartCrabSettings {
 	public final static String REPORT_VIEW_URL = "https://dart.fss.or.kr/report/viewer.do";
 	public final static String USER_AGENT = "Chrome/41.0.2272.89";
 	
+	public final static String DELIMETER = "|";
+	
 	public final static int DEFAULT_TIME_OUT = 100000;
 	
 	
