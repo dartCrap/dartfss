@@ -50,18 +50,13 @@ public class ReportWebDocFactory {
 									+ "&dcmNo=" + viewdocMatcher.group(1)
 									+ "&eleId=1&offset=0&length=0" // default
 									+ "&dtd=" + viewdocMatcher.group(2);
-				report = new ReportWebDoc(header, 
-							new String(
-										Jsoup.connect(reportViewRequest)
-											.userAgent(DartCrabSettings.USER_AGENT)
-											.timeout(DartCrabSettings.DEFAULT_TIME_OUT) // --> to be changed
-											.get()
-											.getElementsByTag("body")
-											.html().getBytes()
-											, StandardCharsets.UTF_8
-									)
+				report = new ReportWebDoc(header,
+							Jsoup.connect(reportViewRequest)
+								.userAgent(DartCrabSettings.USER_AGENT)
+								.timeout(DartCrabSettings.DEFAULT_TIME_OUT) // --> to be changed
+								.get()
+								.html().toString()
 								);
-				
 				log.info("Html load: " + reportViewRequest);
  								
 		} catch (Exception e){

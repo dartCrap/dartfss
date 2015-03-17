@@ -1,9 +1,7 @@
 package com.dartcrab.reports;
 
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-
 
 
 
@@ -71,10 +69,8 @@ public class ReportSearchRequest {
 					+ ", total_page = " + doc.select("total_page").text()
 					);
 			
-			if (doc.select("err_code").text().compareTo("000") != 0) {
-				log.error(doc.select("err_code").text());
-				throw new Exception ("DART OpenAPI Failed");
-			}
+			if (doc.select("err_code").text().compareTo("000") != 0) throw new Exception ("DART OpenAPI Request failed");
+			
 			responseList.add(doc);
 			
 			for (page = 2; page <= Integer.parseInt(doc.select("total_page").text()); page++){
@@ -88,7 +84,6 @@ public class ReportSearchRequest {
 			}
 			
 		} catch (Exception e){
-			
 			e.printStackTrace();
 			
 		} finally{
