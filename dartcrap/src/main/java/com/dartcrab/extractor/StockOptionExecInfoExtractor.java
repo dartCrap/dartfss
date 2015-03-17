@@ -32,9 +32,9 @@ public class StockOptionExecInfoExtractor extends InfoExtractor{
 		
 		// 행사주식수현황
 		// TO-DO
-		
+		DartHtmlProcessor.parseHorizontalHeadingTable(table1.getElementsByTag("tr"),2,1);
 		// 일별행사내역
-		DartHtmlProcessor.parseHorizontalHeadingTable(table2.getElementsByTag("tr"));
+		DartHtmlProcessor.parseHorizontalHeadingTable(table2.getElementsByTag("tr"),2);
 		
 		
 		//DartHtmlProcessor.parseVerticalHeadingTable(ele);
