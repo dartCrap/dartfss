@@ -19,7 +19,7 @@ public class ExtractorDispatcher {
 	/*
 	 * 
 	 */
-	private StockOptionInfoExtractor stockOptionInfoExtractor;
+	private StockOptionExecInfoExtractor stockOptionInfoExtractor;
 
 	
 	
@@ -38,22 +38,23 @@ public class ExtractorDispatcher {
 	 * TO-DO 
 	 */
 	private ExtractorDispatcher(){
-		this.stockOptionInfoExtractor = new StockOptionInfoExtractor();
+		this.stockOptionInfoExtractor = new StockOptionExecInfoExtractor();
 	}
 	
 	/**
 	 * TO-DO....best effort....
 	 */
-	public InfoExtractor dispatch(ReportWebDoc report){
+	public InfoExtractor dispatch(ReportWebDoc report) throws Exception{
 		
-		if (report.getHeader().getRptNm().endsWith("주식매수선택권부여에관한신고")){
+		if (report.getHeader().getRptNm().endsWith("주식매수선택권행사")){
 			this.stockOptionInfoExtractor.setDoc(report);
 			log.info ("Report "+report.getHeader().getRcpDt() 
 					+ " " + report.getHeader().getCrpNm()
 					+ " " + report.getHeader().getRptNm()
 					+ "==>" + this.stockOptionInfoExtractor.getClass().getName());
-		} else if (true){
 			
+		} else if (true){
+			log.error("No matching extractor");
 		}
 		return this.stockOptionInfoExtractor;
 	}
