@@ -13,18 +13,13 @@ import org.slf4j.LoggerFactory;
 
 
 
-
-
-import com.dartcrab.extractor.StockOptionExecInfoExtractor;
-
-
 /**
  * 
  * @author Gi
  *
  */
 public class DartHtmlProcessor {
-	private static Logger log = LoggerFactory.getLogger( StockOptionExecInfoExtractor.class );
+	private static Logger log = LoggerFactory.getLogger( DartHtmlProcessor.class );
 		
 	/**
 	 * 
@@ -62,8 +57,7 @@ public class DartHtmlProcessor {
 				rowData.put(header.get(i).toString(), data.get(i).toString());
 
 			tableData.add(rowData);
-			log.info(rowData.toString());
-			
+
 		}
 		
 		return tableData;
