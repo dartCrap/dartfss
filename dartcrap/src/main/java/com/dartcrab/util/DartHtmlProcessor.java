@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Set;
 
 import org.jsoup.nodes.Element;
+import org.jsoup.nodes.Node;
+import org.jsoup.parser.Tag;
 import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,8 +28,8 @@ public class DartHtmlProcessor {
 	 * @param ele
 	 * @return
 	 */
-	public static Set<HashMap<String/*key*/, String/*value*/>>  parseHorizontalHeadingTable (Elements table, int headerRows){
-		return parseHorizontalHeadingTable (table,headerRows,0);
+	public static Element parseHorizontalHeadingTable (Elements tableSrc, int headerRows){
+		return parseHorizontalHeadingTable (tableSrc,headerRows,0);
 	}
 	
 	/**
@@ -37,30 +39,17 @@ public class DartHtmlProcessor {
 	 * @param dataRows
 	 * @return
 	 */
-		public static Set<HashMap<String/*key*/, String/*value*/>> parseHorizontalHeadingTable (Elements table, int headerRows, int dataRowsNum){
-		List<String> header = __fetchRowHeaders(headerRows,table);
+		public static Element parseHorizontalHeadingTable (Elements tableSrc, int headerRows, int dataRowsNum){
+		Element tableTarget = new Element(Tag.valueOf("TABLE"),DartCrabSettings.BASE_URI);
+			
+		__fetchRowHeaders(headerRows,tableSrc, tableTarget);
 		
-		Set<HashMap<String,String>> tableData= new HashSet();
-		
-		for ( int cursor = headerRows; cursor <table.size() ; cursor++){
+		for ( int cursor = headerRows; cursor <tableSrc.size() ; cursor++){
 			if (dataRowsNum !=0 && cursor >= headerRows+dataRowsNum) break;
-			
-			List<String> data	= __fetchRowData(table,cursor);
-			
-			if (header.size() != data.size()) {
-				log.error("Invalid table layout");
-				return null;
-			}
-	
-			HashMap<String,String> rowData = new HashMap();
-			for (int i = 0 ; i < header.size() ; i++)
-				rowData.put(header.get(i).toString(), data.get(i).toString());
-
-			tableData.add(rowData);
-
+			__fetchRowData(tableSrc,cursor, tableTarget);
 		}
-		
-		return tableData;
+
+		return tableTarget;
 	}
 
 	
@@ -69,48 +58,71 @@ public class DartHtmlProcessor {
 	 * @param 
 	 * @return
 	 */
-	private static List<String> __fetchRowHeaders(int headerRows,Elements table) {
-		List<String> header = new ArrayList();
-		
+	private static Element __fetchRowHeaders(int headerRows,Elements tableSrc, Element tableTarget) {
 		// First Row
-		Elements firstHeader = table.get(0).select("td");
+		Elements firstHeader = tableSrc.get(0).select("td");
 		for (int i = 0 ; i < firstHeader.size(); i++){
 			int colspan = Integer.parseInt("0"+firstHeader.get(i).attr("colspan").toString());
 			
-			if (colspan == 0 ) header.add(firstHeader.get(i).text());
+			Element child = tableTarget.appendElement(__normalizeTag(firstHeader.get(i).text()));
+			
+			if (colspan == 0) child.attr("LEAF","Y");
 			else {
 				for (int j = 0 ; j < colspan; j++)
-					header.add(firstHeader.get(i).text()+DartCrabSettings.DELIMETER);
+					child.appendElement("CHILD_RESERVED");
 			}
 		}
-			
-		// Rest rows
-		for (int i = 1 ; i < headerRows ; i++){
-			int cursor = 0;
-			Elements otherHeader = table.get(i).select("td");
-			for (int j = 0 ; j < header.size(); j++){
-				if ( header.get(j).endsWith(DartCrabSettings.DELIMETER) ) 
-					header.set(j, header.get(j)+ otherHeader.get(cursor++).text());
-			}
+		
+		Elements child = tableTarget.getAllElements(); 
+		
+		for ( int i = 1 ; i < headerRows ; i++){
+			child = child.select("CHILD_RESERVED");
+			Elements src = tableSrc.get(i).select("td");
+			__fetchNextRowHeader(child, src);
 		}
-			
-		return header;
+	
+		return tableTarget;
 	}
 
+	private static void __fetchNextRowHeader(Elements child, Elements src){
+		int cursor = 0;
+		for (Element e: child){
+				e.tagName(__normalizeTag(src.get(cursor++).text()));
+				int colspan = Integer.parseInt("0"+ e.attr("colspan").toString());
+				if (colspan == 0 ) e.attr("LEAF","Y");
+				else {
+					for (int j = 0 ; j < colspan; j++)
+						e.appendElement("CHILD_RESERVED");
+				}
+
+		}
+	}
+	
 	/**
 	 * 
 	 * @param 
 	 * @return
 	 */
-	private static List<String> __fetchRowData(Elements table, int dataIndex) {
-		List<String> data = new ArrayList();
-		
-		Elements row = table.get(dataIndex).select("td");
-		
-		for (int i =0; i<row.size(); i++){
-			data.add(row.get(i).text());
+	private static void __fetchRowData(Elements tableSrc, int dataIndex, Element tableTarget) {
+		Elements row = tableSrc.get(dataIndex).select("td");
+
+		// Get leaves
+		Elements leafNodes = tableTarget.getAllElements().select("[leaf=Y]");
+		int i = 0;
+		for (Element e : leafNodes){
+			e.text(row.get(i++).text()) ;
 		}
 		
-		return data;
+	}
+	
+	/**
+	 * 
+	 */
+	private static String __normalizeTag(String tag){
+		return "" + tag.trim()
+			.replaceAll("[ \t.]", "_")
+			.replaceAll("[(]", "-")
+			.replaceAll("[)]", "");
+
 	}
 }

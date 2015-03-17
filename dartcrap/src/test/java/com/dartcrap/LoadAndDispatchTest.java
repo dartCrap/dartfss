@@ -101,7 +101,9 @@ public class LoadAndDispatchTest {
 										ReportWebDocFactory
 										.loadAndStoreReportWebDoc(header)
 										);
-			if (extractor != null) log.info("Result: " + extractor.extract());
+					
+					if (extractor != null) extractor.extract().store();
+			
 			if (i++ > 20) break; // I'd like to test first 20 reports only.
 			
 		}

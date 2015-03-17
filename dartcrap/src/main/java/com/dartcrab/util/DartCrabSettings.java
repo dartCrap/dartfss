@@ -11,7 +11,8 @@ public class DartCrabSettings {
 	public final static String REPORT_URL = "http://dart.fss.or.kr/dsaf001/main.do";
 	public final static String REPORT_VIEW_URL = "https://dart.fss.or.kr/report/viewer.do";
 	public final static String USER_AGENT = "Chrome/41.0.2272.89";
-	
+	public final static String BASE_URI = "/dartcrab/dom/";
+	public final static String MAIN_TAG = "DART_INFO";
 	public final static String DELIMETER = "|";
 	
 	public final static int DEFAULT_TIME_OUT = 100000;
