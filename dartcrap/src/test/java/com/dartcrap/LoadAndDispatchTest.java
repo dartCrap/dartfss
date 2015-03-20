@@ -81,10 +81,10 @@ public class LoadAndDispatchTest {
 		
 		ReportSearchRequest listRequest = new ReportSearchRequest()
 											.setAuth(properties.getProperty("auth"))
-											.setBsnDp("I001")		// 수시공시 (주식매수선택권 행사 포함)
-											.setCrpCd("053300")			// 
-											.setStartDt("20150303")			//
-											.setEndDt("20150303")			// not specified
+											.setBsnDp("C003")		// 수시공시 (주식매수선택권 행사 포함)
+											.setCrpCd("016360")			// 
+											.setStartDt("20150312")			//
+											.setEndDt("20150312")			// not specified
 											;
 		
 		log.info("Request: " + listRequest);
@@ -95,14 +95,15 @@ public class LoadAndDispatchTest {
 		InfoExtractor extractor = null;
 		
 		for (ReportHeader header: searchResult.extractReportHeaders()){
-			if (header.getRptNm().equals("주식매수선택권행사"))
-					extractor = ExtractorDispatcher.getInstance()
-								.dispatch(
-										ReportWebDocFactory
-										.loadAndStoreReportWebDoc(header)
-										);
+			if (!header.getRcpNo().equals("20150312000239")) continue;
+			
+			extractor = ExtractorDispatcher.getInstance()
+						.dispatch(
+								ReportWebDocFactory
+								.loadAndStoreReportWebDoc(header)
+								);
 					
-					if (extractor != null) extractor.extract().store();
+			if (extractor != null) extractor.extract().store();
 			
 			if (i++ > 20) break; // I'd like to test first 20 reports only.
 			

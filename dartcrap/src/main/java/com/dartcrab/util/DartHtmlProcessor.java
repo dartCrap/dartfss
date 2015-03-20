@@ -115,12 +115,56 @@ public class DartHtmlProcessor {
 		
 	}
 	
+	
+	
+	/**
+	 * Limited use
+	 * @param ele
+	 * @param headerRows
+	 * @param dataRows
+	 * @return
+	 */
+		public static Element parseVerticalHeadingTable (Elements tableSrc){
+		Element tableTarget = new Element(Tag.valueOf("TABLE"),DartCrabSettings.BASE_URI);
+		
+		Elements tbody = tableSrc.select("tbody");
+		
+		Elements tbodyTr = tbody.select("tr");
+		
+		Element	previous = null;
+		
+		int count = 0 ; //
+		
+		for (Element e : tbodyTr){
+			int rowspan = Integer.parseInt("0"+ e.child(0).attr("rowspan").toString());
+			
+			if (rowspan == 0 && count == 0) {
+				tableTarget.appendElement(__normalizeTag(e.child(0).text())).text(e.child(1).text());
+			} else if (rowspan > 1 && count == 0 ){
+				count = rowspan - 1;
+				previous = tableTarget.appendElement(__normalizeTag(e.child(0).text()));
+				previous.appendElement(__normalizeTag(e.child(1).text())).text(e.child(2).text());
+			} else if (rowspan == 0 && count >0){
+				previous.appendElement(__normalizeTag(e.child(0).text())).text(e.child(1).text());
+				count--;
+			}			
+		}
+		log.info(tableTarget.toString());
+		return tableTarget;
+	}
+	
+	
+	
+	
+	
+	
+	
 	/**
 	 * 
 	 */
 	private static String __normalizeTag(String tag){
 		return "" + tag.trim()
-			.replaceAll("[ \t.]", "_")
+			.replaceAll("[ \t.]", "")
 			.replaceAll("[(]", "-")
 			.replaceAll("[)]", "");
 
