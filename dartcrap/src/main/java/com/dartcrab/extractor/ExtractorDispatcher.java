@@ -19,7 +19,7 @@ public class ExtractorDispatcher {
 	/*
 	 * 
 	 */
-	private StockOptionExecInfoExtractor 	stockOptionInfoExtractor;
+	private StockOptionExecReportExtractor 	stockOptionInfoExtractor;
 	private DlsInfoExtractor 				dlsInfoExtractor;
 
 	
@@ -39,15 +39,15 @@ public class ExtractorDispatcher {
 	 * TO-DO 
 	 */
 	private ExtractorDispatcher(){
-		this.stockOptionInfoExtractor 	= new StockOptionExecInfoExtractor();
+		this.stockOptionInfoExtractor 	= new StockOptionExecReportExtractor();
 		this.dlsInfoExtractor 			= new DlsInfoExtractor();
 	}
 	
 	/**
 	 * TO-DO....best effort....
 	 */
-	public InfoExtractor dispatch(ReportWebDoc report) throws Exception{
-		InfoExtractor extractor = null;
+	public ReportExtractor dispatch(ReportWebDoc report) throws Exception{
+		ReportExtractor extractor = null;
 		if (report.getHeader().getRptNm().endsWith("주식매수선택권행사")){
 			extractor = this.stockOptionInfoExtractor.setDoc(report);
 			log.info ("Report "+report.getHeader().getRcpDt() 

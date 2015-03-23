@@ -145,28 +145,34 @@ public class DartHtmlProcessor {
 				previous = tableTarget.appendElement(__normalizeTag(e.child(0).text()));
 				previous.appendElement(__normalizeTag(e.child(1).text())).text(e.child(2).text());
 			} else if (rowspan == 0 && count >0){
-				previous.appendElement(__normalizeTag(e.child(0).text())).text(e.child(1).text());
+				if (e.childNodeSize() == 2 )
+					previous.appendElement(__normalizeTag(e.child(0).text())).text(e.child(1).text());
+				else 
+					previous.appendElement(__normalizeTag(e.child(0).text())).text(previous.text());
 				count--;
-			}			
-		}
-		log.info(tableTarget.toString());
+			} else {
+				log.error("Invalid table layout");
+			}
+		}	
+		
 		return tableTarget;
 	}
 	
-	
-	
-	
-	
-	
+		
 	
 	/**
 	 * 
 	 */
 	private static String __normalizeTag(String tag){
-		return "" + tag.trim()
-			.replaceAll("[ \t.]", "")
-			.replaceAll("[(]", "-")
-			.replaceAll("[)]", "");
 
+		String rtr = tag
+			.replaceAll("&nbsp;", "")
+			.replaceAll("&nbsp", "")
+			.replaceAll("[\n\f\r\b \t.]", "")
+			.replaceAll("[(,/]", "_")
+			.replaceAll("[)1-9]", "")
+			.trim();
+
+		return rtr;
 	}
 }

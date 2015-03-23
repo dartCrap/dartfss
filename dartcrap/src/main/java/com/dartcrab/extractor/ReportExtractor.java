@@ -1,20 +1,20 @@
 package com.dartcrab.extractor;
 
-import com.dartcrab.entities.GenericDartInfo;
+import com.dartcrab.entities.GenericDartReport;
 import com.dartcrab.reports.ReportWebDoc;
 
-public abstract class InfoExtractor {
+public abstract class ReportExtractor {
 	private ReportWebDoc	doc;
 	/**
 	 * 
 	 * @return
 	 */
-	public abstract GenericDartInfo extract();
+	public abstract GenericDartReport extract();
 	
 	/**
 	 * 
 	 */
-	public InfoExtractor setDoc(ReportWebDoc doc){
+	public ReportExtractor setDoc(ReportWebDoc doc){
 		this.doc = doc;
 		return this;
 	}
@@ -26,11 +26,11 @@ public abstract class InfoExtractor {
 	/**
 	 * 
 	 */
-	public InfoExtractor (ReportWebDoc doc){
+	public ReportExtractor (ReportWebDoc doc){
 		this.doc = doc;
 	}
 	
-	public InfoExtractor(){
+	public ReportExtractor(){
 		this.doc = null;
 	}
 }

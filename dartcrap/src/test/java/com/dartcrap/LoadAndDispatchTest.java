@@ -28,7 +28,7 @@ import org.slf4j.LoggerFactory;
 
 import com.dartcrab.Book;
 import com.dartcrab.extractor.ExtractorDispatcher;
-import com.dartcrab.extractor.InfoExtractor;
+import com.dartcrab.extractor.ReportExtractor;
 import com.dartcrab.reports.ReportHeader;
 import com.dartcrab.reports.ReportSearchRequest;
 import com.dartcrab.reports.ReportSearchResponse;
@@ -72,7 +72,7 @@ public class LoadAndDispatchTest {
 	}
 
 	@Test
-	public void testReportLoad() throws Exception {
+	public void searchReport() throws Exception {
 		
 		/*System.setProperty("http.proxyHost", "104.223.3.223");
 		System.setProperty("http.proxyPort", "7808");
@@ -81,10 +81,10 @@ public class LoadAndDispatchTest {
 		
 		ReportSearchRequest listRequest = new ReportSearchRequest()
 											.setAuth(properties.getProperty("auth"))
-											.setBsnDp("C003")		// 수시공시 (주식매수선택권 행사 포함)
-											.setCrpCd("016360")			// 
-											.setStartDt("20150312")			//
-											.setEndDt("20150312")			// not specified
+											.setBsnDp("C003")		
+											.setCrpCd("016360")		 
+											.setStartDt("20150312")	
+											.setEndDt("20150312")	
 											;
 		
 		log.info("Request: " + listRequest);
@@ -92,10 +92,30 @@ public class LoadAndDispatchTest {
 		ReportSearchResponse searchResult = listRequest.send();
 		
 		int i = 1;
-		InfoExtractor extractor = null;
 		
 		for (ReportHeader header: searchResult.extractReportHeaders()){
-			if (!header.getRcpNo().equals("20150312000239")) continue;
+	
+			ReportWebDocFactory.loadAndStoreReportWebDoc(header);
+		
+			if (i++ > 20) break; // I'd like to test first 20 reports only.
+		}
+		//assertEquals( "Should get empty list since nothing is indexed yet", 0, books.size() );
+	}
+
+	
+	@Test
+	public void extractReport() throws Exception {
+		// TO-DO
+		String[][] rcpList = {
+				{"20150312000239","일괄신고추가서류( 결합증권 )"}
+				,{"20150303900342","주식매수선택권행사"}
+			};
+		
+		ReportExtractor extractor = null;
+		
+		for (String[] rcpHeader : rcpList){
+			//TO-DO
+			ReportHeader header = new ReportHeader(rcpHeader[0], null, null,null, rcpHeader[1], null, null,null);
 			
 			extractor = ExtractorDispatcher.getInstance()
 						.dispatch(
@@ -103,17 +123,10 @@ public class LoadAndDispatchTest {
 								.loadAndStoreReportWebDoc(header)
 								);
 					
-			if (extractor != null) extractor.extract().store();
-			
-			if (i++ > 20) break; // I'd like to test first 20 reports only.
-			
-		}
-
-		
-		//assertEquals( "Should get empty list since nothing is indexed yet", 0, books.size() );
-
+			if (extractor != null) extractor.extract();
+		}	
+	
 	}
-
 
 	private void initHibernate() {
 		emf = Persistence.createEntityManagerFactory( "dartcrap-persistence" );
