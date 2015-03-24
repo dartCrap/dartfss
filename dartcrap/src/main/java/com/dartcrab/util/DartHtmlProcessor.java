@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.parser.Tag;
@@ -39,16 +40,18 @@ public class DartHtmlProcessor {
 	 * @param dataRows
 	 * @return
 	 */
-		public static Element parseHorizontalHeadingTable (Elements tableSrc, int headerRows, int dataRowsNum){
-		Element tableTarget = new Element(Tag.valueOf("TABLE"),DartCrabSettings.BASE_URI);
+	public static Element parseHorizontalHeadingTable (Elements tableSrc, int headerRows, int dataRowsNum){
+		Element tableTarget = new Element(Tag.valueOf("table"),DartCrabSettings.BASE_URI);
 			
-		__fetchRowHeaders(headerRows,tableSrc, tableTarget);
-		
 		for ( int cursor = headerRows; cursor <tableSrc.size() ; cursor++){
 			if (dataRowsNum !=0 && cursor >= headerRows+dataRowsNum) break;
-			__fetchRowData(tableSrc,cursor, tableTarget);
-		}
+			
+			Element rowData = tableTarget.appendElement("row");
+			__fetchRowHeaders(headerRows,tableSrc, rowData);
 
+			__fetchRowData(tableSrc,cursor, rowData);
+		}
+		
 		return tableTarget;
 	}
 
@@ -164,15 +167,21 @@ public class DartHtmlProcessor {
 	 * 
 	 */
 	private static String __normalizeTag(String tag){
-
+	
 		String rtr = tag
 			.replaceAll("&nbsp;", "")
 			.replaceAll("&nbsp", "")
-			.replaceAll("[\n\f\r\b \t.]", "")
+			.replaceAll("\\p{Z}", "")			// IDEOGRAPHIC SPACE 
+//			.replaceAll("\\s+", "")
+//			.replaceAll("[\n\f\r\b\t\\s ]", "")
 			.replaceAll("[(,/]", "_")
 			.replaceAll("[)1-9]", "")
 			.trim();
-
-		return rtr;
+		if (rtr.endsWith("일_예정")) {
+			char[] ddd= rtr.toCharArray();
+//			log.info(new String(ddd[1]));
+		}
+		
+		return rtr.replaceAll("\\s", "-");
 	}
 }

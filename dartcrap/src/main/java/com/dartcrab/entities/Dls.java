@@ -1,16 +1,17 @@
 package com.dartcrab.entities;
 
 import java.sql.Date;
+import java.util.Arrays;
 
 public class Dls {
 	private	String			instTitle;				// 종목명
 	private String[]		underlying; 			// 기초자산
 	
 	private String			curcny;					// 통화		
-	private int				totalIssueAmt;			// 모집총액
+	private long			totalIssueAmt;			// 모집총액
 	private int				unitParPrice;			// 단위액면가격
 	private	int				unitIssuePrice;			// 단위발행가격
-	private	int				totalIssueUnits;		// 발행수량
+	private	long			totalIssueUnits;		// 발행수량
 
 	private Date			subscriptionStrtDt;		// 청약시작일
 	private Date			subscriptionEndDt;		// 청약종료일
@@ -21,6 +22,162 @@ public class Dls {
 	private String			depository;				// 예탁기관
 	private	String			listedExchange;			// 거래소
 	
+	public String getInstTitle() {
+		return instTitle;
+	}
+	public void setInstTitle(String instTitle) {
+		this.instTitle = instTitle;
+	}
+	public String[] getUnderlying() {
+		return underlying;
+	}
+	public void setUnderlying(String[] underlying) {
+		this.underlying = underlying;
+	}
+	public String getCurcny() {
+		return curcny;
+	}
+	public void setCurcny(String curcny) {
+		this.curcny = curcny;
+	}
+	public long getTotalIssueAmt() {
+		return totalIssueAmt;
+	}
+	public void setTotalIssueAmt(long totalIssueAmt) {
+		this.totalIssueAmt = totalIssueAmt;
+	}
+	public int getUnitParPrice() {
+		return unitParPrice;
+	}
+	public void setUnitParPrice(int unitParPrice) {
+		this.unitParPrice = unitParPrice;
+	}
+	public int getUnitIssuePrice() {
+		return unitIssuePrice;
+	}
+	public void setUnitIssuePrice(int unitIssuePrice) {
+		this.unitIssuePrice = unitIssuePrice;
+	}
+	public long getTotalIssueUnits() {
+		return totalIssueUnits;
+	}
+	public void setTotalIssueUnits(int totalIssueUnits) {
+		this.totalIssueUnits = totalIssueUnits;
+	}
+	public Date getSubscriptionStrtDt() {
+		return subscriptionStrtDt;
+	}
+	public void setSubscriptionStrtDt(Date subscriptionStrtDt) {
+		this.subscriptionStrtDt = subscriptionStrtDt;
+	}
+	public Date getSubscriptionEndDt() {
+		return subscriptionEndDt;
+	}
+	public void setSubscriptionEndDt(Date subscriptionEndDt) {
+		this.subscriptionEndDt = subscriptionEndDt;
+	}
+	public Date getSubscriptionSttlDt() {
+		return subscriptionSttlDt;
+	}
+	public void setSubscriptionSttlDt(Date subscriptionSttlDt) {
+		this.subscriptionSttlDt = subscriptionSttlDt;
+	}
+	public Date getSubscriptionDlvrDt() {
+		return subscriptionDlvrDt;
+	}
+	public void setSubscriptionDlvrDt(Date subscriptionDlvrDt) {
+		this.subscriptionDlvrDt = subscriptionDlvrDt;
+	}
+	public Date getIssueDt() {
+		return issueDt;
+	}
+	public void setIssueDt(Date issueDt) {
+		this.issueDt = issueDt;
+	}
+	public String getDepository() {
+		return depository;
+	}
+	public void setDepository(String depository) {
+		this.depository = depository;
+	}
+	public String getListedExchange() {
+		return listedExchange;
+	}
+	public void setListedExchange(String listedExchange) {
+		this.listedExchange = listedExchange;
+	}
+	public Date getMaturityDt() {
+		return maturityDt;
+	}
+	public void setMaturityDt(Date maturityDt) {
+		this.maturityDt = maturityDt;
+	}
+	public Date getMaturityEvalDt() {
+		return maturityEvalDt;
+	}
+	public void setMaturityEvalDt(Date maturityEvalDt) {
+		this.maturityEvalDt = maturityEvalDt;
+	}
+	public Date getMaturitySettlMethod() {
+		return maturitySettlMethod;
+	}
+	public void setMaturitySettlMethod(Date maturitySettlMethod) {
+		this.maturitySettlMethod = maturitySettlMethod;
+	}
+	public String getHedgeTrader() {
+		return hedgeTrader;
+	}
+	public void setHedgeTrader(String hedgeTrader) {
+		this.hedgeTrader = hedgeTrader;
+	}
+	public String getDlsClass() {
+		return dlsClass;
+	}
+	public void setDlsClass(String dlsClass) {
+		this.dlsClass = dlsClass;
+	}
+	public Date[] getUnderlyingEvalDt() {
+		return underlyingEvalDt;
+	}
+	public void setUnderlyingEvalDt(Date[] underlyingEvalDt) {
+		this.underlyingEvalDt = underlyingEvalDt;
+	}
+	public float[] getExercisePriceRate() {
+		return exercisePriceRate;
+	}
+	public void setExercisePriceRate(float[] exercisePriceRate) {
+		this.exercisePriceRate = exercisePriceRate;
+	}
+	public float[] getExercisePriceRateWithCare() {
+		return exercisePriceRateWithCare;
+	}
+	public void setExercisePriceRateWithCare(float[] exercisePriceRateWithCare) {
+		this.exercisePriceRateWithCare = exercisePriceRateWithCare;
+	}
+	public float getMaxProfitYield() {
+		return maxProfitYield;
+	}
+	public void setMaxProfitYield(float maxProfitYield) {
+		this.maxProfitYield = maxProfitYield;
+	}
+	public float getMatLossYield() {
+		return matLossYield;
+	}
+	public void setMatLossYield(float matLossYield) {
+		this.matLossYield = matLossYield;
+	}
+	public int getEarlyRedemptionSttlDays() {
+		return earlyRedemptionSttlDays;
+	}
+	public void setEarlyRedemptionSttlDays(int earlyRedemptionSttlDays) {
+		this.earlyRedemptionSttlDays = earlyRedemptionSttlDays;
+	}
+	public int getMaturitySttlDays() {
+		return maturitySttlDays;
+	}
+	public void setMaturitySttlDays(int maturitySttlDays) {
+		this.maturitySttlDays = maturitySttlDays;
+	}
 	private Date			maturityDt;				// 만기일
 	private Date			maturityEvalDt;			// 만기평가일
 	private Date			maturitySettlMethod;	// 만기결제방법
@@ -38,5 +195,31 @@ public class Dls {
 	
 	private int				earlyRedemptionSttlDays;// 평가일로부터 조기상환액 지급일까지의 기간		
 	private int				maturitySttlDays;	// 평가일로부터 조기상환액 지급일까지의 기간
+
+	@Override
+	public String toString() {
+		return "Dls [instTitle=" + instTitle + ", underlying="
+				+ Arrays.toString(underlying) + ", curcny=" + curcny
+				+ ", totalIssueAmt=" + totalIssueAmt + ", unitParPrice="
+				+ unitParPrice + ", unitIssuePrice=" + unitIssuePrice
+				+ ", totalIssueUnits=" + totalIssueUnits
+				+ ", subscriptionStrtDt=" + subscriptionStrtDt
+				+ ", subscriptionEndDt=" + subscriptionEndDt
+				+ ", subscriptionSttlDt=" + subscriptionSttlDt
+				+ ", subscriptionDlvrDt=" + subscriptionDlvrDt + ", issueDt="
+				+ issueDt + ", depository=" + depository + ", listedExchange="
+				+ listedExchange + ", maturityDt=" + maturityDt
+				+ ", maturityEvalDt=" + maturityEvalDt
+				+ ", maturitySettlMethod=" + maturitySettlMethod
+				+ ", hedgeTrader=" + hedgeTrader + ", dlsClass=" + dlsClass
+				+ ", underlyingEvalDt=" + Arrays.toString(underlyingEvalDt)
+				+ ", exercisePriceRate=" + Arrays.toString(exercisePriceRate)
+				+ ", exercisePriceRateWithCare="
+				+ Arrays.toString(exercisePriceRateWithCare)
+				+ ", maxProfitYield=" + maxProfitYield + ", matLossYield="
+				+ matLossYield + ", earlyRedemptionSttlDays="
+				+ earlyRedemptionSttlDays + ", maturitySttlDays="
+				+ maturitySttlDays + "]";
+	}
 	
 }

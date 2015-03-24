@@ -33,10 +33,9 @@ public class ReportHeader {
 		this.rcpDt = rcpDt;
 		this.remark = remark;
 	}
-
-
-
-	
+	public ReportHeader() {
+		super();
+	}	
 
 	
 	@Override
@@ -61,8 +60,9 @@ public class ReportHeader {
 
 
 
-	public void setRcpNo(String rcpNo) {
+	public ReportHeader setRcpNo(String rcpNo) {
 		this.rcpNo = rcpNo;
+		return this;
 	}
 
 
@@ -75,8 +75,9 @@ public class ReportHeader {
 
 
 
-	public void setCrpCd(String crpCd) {
+	public ReportHeader setCrpCd(String crpCd) {
 		this.crpCd = crpCd;
+		return this;
 	}
 
 
@@ -89,8 +90,9 @@ public class ReportHeader {
 
 
 
-	public void setCrpNm(String crpNm) {
+	public ReportHeader setCrpNm(String crpNm) {
 		this.crpNm = crpNm;
+		return this;
 	}
 
 
@@ -103,8 +105,9 @@ public class ReportHeader {
 
 
 
-	public void setCrpCls(String crpCls) {
+	public ReportHeader setCrpCls(String crpCls) {
 		this.crpCls = crpCls;
+		return this;
 	}
 
 
@@ -117,8 +120,9 @@ public class ReportHeader {
 
 
 
-	public void setRptNm(String rptNm) {
+	public ReportHeader setRptNm(String rptNm) {
 		this.rptNm = rptNm;
+		return this;
 	}
 
 
@@ -131,8 +135,9 @@ public class ReportHeader {
 
 
 
-	public void setFlrNm(String flrNm) {
+	public ReportHeader setFlrNm(String flrNm) {
 		this.flrNm = flrNm;
+		return this;
 	}
 
 
@@ -145,8 +150,9 @@ public class ReportHeader {
 
 
 
-	public void setRcpDt(String rcpDt) {
+	public ReportHeader setRcpDt(String rcpDt) {
 		this.rcpDt = rcpDt;
+		return this;
 	}
 
 
@@ -159,7 +165,8 @@ public class ReportHeader {
 
 
 
-	public void setRemark(String remark) {
+	public ReportHeader setRemark(String remark) {
 		this.remark = remark;
+		return this;
 	}
 }

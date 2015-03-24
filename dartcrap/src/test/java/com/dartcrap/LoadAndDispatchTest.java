@@ -108,7 +108,7 @@ public class LoadAndDispatchTest {
 		// TO-DO
 		String[][] rcpList = {
 				{"20150312000239","일괄신고추가서류( 결합증권 )"}
-				,{"20150303900342","주식매수선택권행사"}
+//				{"20150303900342","주식매수선택권행사"}
 			};
 		
 		ReportExtractor extractor = null;

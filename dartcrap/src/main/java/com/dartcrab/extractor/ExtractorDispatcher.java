@@ -20,7 +20,7 @@ public class ExtractorDispatcher {
 	 * 
 	 */
 	private StockOptionExecReportExtractor 	stockOptionInfoExtractor;
-	private DlsInfoExtractor 				dlsInfoExtractor;
+	private DlsIssueReportExtractor 				dlsInfoExtractor;
 
 	
 	
@@ -40,7 +40,7 @@ public class ExtractorDispatcher {
 	 */
 	private ExtractorDispatcher(){
 		this.stockOptionInfoExtractor 	= new StockOptionExecReportExtractor();
-		this.dlsInfoExtractor 			= new DlsInfoExtractor();
+		this.dlsInfoExtractor 			= new DlsIssueReportExtractor();
 	}
 	
 	/**
