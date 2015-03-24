@@ -2,7 +2,7 @@ package com.dartcrab.entities;
 
 import java.sql.Date;
 
-public class Dls {
+public class Dls {   
 	private	String			instTitle;				// 종목명
 	private String[]		underlying; 			// 기초자산
 	
