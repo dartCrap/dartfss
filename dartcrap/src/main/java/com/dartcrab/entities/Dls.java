@@ -1,9 +1,12 @@
 package com.dartcrab.entities;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class Dls {
+
 	private	String			instTitle;				// 종목명
 	private String[]		underlying; 			// 기초자산
 	
@@ -19,8 +22,56 @@ public class Dls {
 	private Date			subscriptionDlvrDt;		// 입고일 (배정일 및 환불일)
 	private Date			issueDt;				// 발행일
 	
+	
 	private String			depository;				// 예탁기관
 	private	String			listedExchange;			// 거래소
+	
+	private String			earlyRedemptionSttlMethod; // 조기상환 결제방법
+	
+	private Date			maturityDt;				// 만기일
+	private Date[]			maturityEvalDt;			// 만기평가일 --> 3일 평균으로 하는 경우가 있으므로 List 처리
+	private String			maturitySettlMethod;	// 만기결제방법
+	private Date			maturitySttlDt;			// 만기상환금액지급일
+	private String			hedgeTrader;			// 헷지운용사
+	
+	
+	private	String			dlsClass;				// DLS 상품종류 ==> TO-BE
+	
+	
+	/* Option strucure related something... */
+	public class RedemptionSchedule {  //--> To-do
+		int		id;							//temp
+		String	redemptionTriggerClass;		//temp
+		String	provisionText;				//temp
+		float	yield;						//temp
+		
+		@Override
+		public String toString() {
+			return "RedemptionSchedule [redemptionTriggerClass="
+					+ redemptionTriggerClass + ", provisionText="
+					+ provisionText + ", yield=" + yield + "]";
+		}
+
+		public RedemptionSchedule(int id, String redemptionTriggerClass,
+				String provisionText, float yield) {
+			super();
+			this.id = id;
+			this.redemptionTriggerClass = redemptionTriggerClass;
+			this.provisionText = provisionText;
+			this.yield = yield;
+		}
+		
+	};
+	private	List<RedemptionSchedule>  redemptionSchedule;	// temp 상환스케
+	
+	private	Date[]			underlyingEvalDt;		// 기준가격결정일
+	private	float[]			exercisePriceRate;		// 행사가격
+	private	float[]			exercisePriceRateWithCare;	// 케어(?) 발생 시 행사가격 --> to be revised
+	private float			maxProfitYield;			// 최대이익
+	private float			matLossYield;			// 최대손실
+	
+	private int				earlyRedemptionSttlDays;// 평가일로부터 조기상환액 지급일까지의 기간		
+	
 	
 	public String getInstTitle() {
 		return instTitle;
@@ -112,16 +163,16 @@ public class Dls {
 	public void setMaturityDt(Date maturityDt) {
 		this.maturityDt = maturityDt;
 	}
-	public Date getMaturityEvalDt() {
+	public Date[] getMaturityEvalDt() {
 		return maturityEvalDt;
 	}
-	public void setMaturityEvalDt(Date maturityEvalDt) {
+	public void setMaturityEvalDt(Date [] maturityEvalDt) {
 		this.maturityEvalDt = maturityEvalDt;
 	}
-	public Date getMaturitySettlMethod() {
+	public Strubg getMaturitySettlMethod() {
 		return maturitySettlMethod;
 	}
-	public void setMaturitySettlMethod(Date maturitySettlMethod) {
+	public void setMaturitySettlMethod(String maturitySettlMethod) {
 		this.maturitySettlMethod = maturitySettlMethod;
 	}
 	public String getHedgeTrader() {
@@ -171,31 +222,39 @@ public class Dls {
 	}
 	public void setEarlyRedemptionSttlDays(int earlyRedemptionSttlDays) {
 		this.earlyRedemptionSttlDays = earlyRedemptionSttlDays;
-	}
-	public int getMaturitySttlDays() {
-		return maturitySttlDays;
-	}
-	public void setMaturitySttlDays(int maturitySttlDays) {
-		this.maturitySttlDays = maturitySttlDays;
-	}
-	private Date			maturityDt;				// 만기일
-	private Date			maturityEvalDt;			// 만기평가일
-	private Date			maturitySettlMethod;	// 만기결제방법
-	
-	private String			hedgeTrader;			// 헷지운용사
-	
-	
-	private	String			dlsClass;				// DLS 상품종류 ==> TO-BE
-	/* Option strucure related something... */
-	private	Date[]			underlyingEvalDt;		// 기준가격결정일
-	private	float[]			exercisePriceRate;		// 행사가격
-	private	float[]			exercisePriceRateWithCare;	// 케어(?) 발생 시 행사가격 --> to be revised
-	private float			maxProfitYield;			// 최대이익
-	private float			matLossYield;			// 최대손실
-	
-	private int				earlyRedemptionSttlDays;// 평가일로부터 조기상환액 지급일까지의 기간		
-	private int				maturitySttlDays;	// 평가일로부터 조기상환액 지급일까지의 기간
+	}	
 
+	public String getEarlyRedemptionSttlMethod() {
+		return earlyRedemptionSttlMethod;
+	}
+	public void setEarlyRedemptionSttlMethod(String earlyRedemptionSttlMethod) {
+		this.earlyRedemptionSttlMethod = earlyRedemptionSttlMethod;
+	}
+	public Date getMaturitySttlDt() {
+		return maturitySttlDt;
+	}
+	public void setMaturitySttlDt(Date maturitySttlDt) {
+		this.maturitySttlDt = maturitySttlDt;
+	}
+	
+	public List<RedemptionSchedule>  getRedemptionSchedule() {
+		return redemptionSchedule;
+	}
+	
+	public void addRedemptionSchedule(
+			int		id							//temp
+			,String	redemptionTriggerClass		//temp
+			,String	provisionText				//temp
+			,float	yield
+			) {
+		if (this.redemptionSchedule == null) this.redemptionSchedule = new ArrayList<RedemptionSchedule>();
+		
+		this.redemptionSchedule.add(
+				new RedemptionSchedule(
+						id, redemptionTriggerClass,provisionText,yield
+					)
+				);
+	}
 	@Override
 	public String toString() {
 		return "Dls [instTitle=" + instTitle + ", underlying="
@@ -208,18 +267,22 @@ public class Dls {
 				+ ", subscriptionSttlDt=" + subscriptionSttlDt
 				+ ", subscriptionDlvrDt=" + subscriptionDlvrDt + ", issueDt="
 				+ issueDt + ", depository=" + depository + ", listedExchange="
-				+ listedExchange + ", maturityDt=" + maturityDt
-				+ ", maturityEvalDt=" + maturityEvalDt
+				+ listedExchange + ", earlyRedemptionSttlMethod="
+				+ earlyRedemptionSttlMethod + ", maturityDt=" + maturityDt
+				+ ", maturityEvalDt=" + Arrays.toString(maturityEvalDt)
 				+ ", maturitySettlMethod=" + maturitySettlMethod
-				+ ", hedgeTrader=" + hedgeTrader + ", dlsClass=" + dlsClass
+				+ ", maturitySttlDt=" + maturitySttlDt + ", hedgeTrader="
+				+ hedgeTrader + ", dlsClass=" + dlsClass
+				+ ", redemptionSchedule=" + redemptionSchedule
 				+ ", underlyingEvalDt=" + Arrays.toString(underlyingEvalDt)
 				+ ", exercisePriceRate=" + Arrays.toString(exercisePriceRate)
 				+ ", exercisePriceRateWithCare="
 				+ Arrays.toString(exercisePriceRateWithCare)
 				+ ", maxProfitYield=" + maxProfitYield + ", matLossYield="
 				+ matLossYield + ", earlyRedemptionSttlDays="
-				+ earlyRedemptionSttlDays + ", maturitySttlDays="
-				+ maturitySttlDays + "]";
+				+ earlyRedemptionSttlDays + "]";
 	}
+	
+	
 	
 }

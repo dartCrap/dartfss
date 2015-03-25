@@ -84,5 +84,16 @@ public class DlsIssueReport extends GenericDartReport{
 		return totalIssueAmt;
 	}
 
+	@Override
+	public String toString() {
+		return "DlsIssueReport [dlsIssueList=" + dlsIssueList
+				+ ", registrationDate=" + registrationDate
+				+ ", registrationEffectiveDate=" + registrationEffectiveDate
+				+ ", registrationTotalAmt=" + registrationTotalAmt
+				+ ", annexIssueAmt=" + annexIssueAmt + ", totalIssueAmt="
+				+ totalIssueAmt + ", totalOutstandingAmt="
+				+ totalOutstandingAmt + "]";
+	}
+
 
 }
