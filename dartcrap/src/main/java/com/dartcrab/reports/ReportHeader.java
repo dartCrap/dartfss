@@ -1,12 +1,16 @@
 package com.dartcrab.reports;
 
+import javax.persistence.*;
 
 /**
  * 
  * @author Gi
  *
  */
+@Entity
+@Table
 public class ReportHeader {
+	@Id
 	private String rcpNo; 		// Report No --> GET request for http://dart.fss.or.kr/dsaf001/main.do?rcpNo=xxxxxxxxxxxxxxx
 	private String crpCd;
 	private String crpNm;

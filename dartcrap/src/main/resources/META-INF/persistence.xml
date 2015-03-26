@@ -5,21 +5,22 @@
              xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd"
              version="1.0">
 
-    <persistence-unit name="dartcrap-persistence">
+    <persistence-unit name="dartcrab-persistence">
         <properties>
 
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
             <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
-            <property name="hibernate.connection.username" value="nezach"/>
-            <property name="hibernate.connection.password" value="kosk8192"/>
-            <property name="hibernate.connection.url" value="jdbc:mysql://localhost/nezach"/>
+            <property name="hibernate.connection.username" value="dartcrab"/>
+            <property name="hibernate.connection.password" value="dartcrab"/>
+         	<property name="hibernate.connection.characterEncoding" value="utf8"/>
+            <property name="hibernate.connection.url" value="jdbc:mysql://10.0.0.14/dartcrab"/>
 
             <property name="hibernate.hbm2ddl.auto" value="update"/>
 
-            <property name="hibernate.search.default.indexBase" value="target"/>
+           
 
             <!-- optional -->
-            <property name="hibernate.search.default.directory_provider" value="filesystem"/>
+
         </properties>
     </persistence-unit>
 </persistence>

@@ -1,6 +1,5 @@
 package com.dartcrab.reports;
 
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +11,6 @@ import java.util.List;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,7 +51,7 @@ public class ReportSearchRequest {
 				+ "&fin_rpt=" + finRpt 
 				+ "&bsn_tp=" + bsnDp; 
 		
-		List<Document> responseList = new ArrayList();
+		List<Document> responseList = new ArrayList<Document>();
 		
 		int page = 1;
 		

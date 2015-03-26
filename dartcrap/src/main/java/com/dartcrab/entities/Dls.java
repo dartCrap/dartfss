@@ -38,7 +38,7 @@ public class Dls {
 	private	String			dlsClass;				// DLS 상품종류 ==> TO-BE
 	
 	
-	/* Option strucure related something... */
+	/* Option structure related something... */
 	public class RedemptionSchedule {  //--> To-do
 		int		id;							//temp
 		String	redemptionTriggerClass;		//temp
@@ -169,7 +169,7 @@ public class Dls {
 	public void setMaturityEvalDt(Date [] maturityEvalDt) {
 		this.maturityEvalDt = maturityEvalDt;
 	}
-	public Strubg getMaturitySettlMethod() {
+	public String getMaturitySettlMethod() {
 		return maturitySettlMethod;
 	}
 	public void setMaturitySettlMethod(String maturitySettlMethod) {

@@ -1,14 +1,6 @@
 package com.dartcrab.util;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
-import org.jsoup.nodes.Node;
 import org.jsoup.parser.Tag;
 import org.jsoup.select.Elements;
 import org.slf4j.Logger;
@@ -177,10 +169,6 @@ public class DartHtmlProcessor {
 			.replaceAll("[(,/]", "_")
 			.replaceAll("[)1-9]", "")
 			.trim();
-		if (rtr.endsWith("일_예정")) {
-			char[] ddd= rtr.toCharArray();
-//			log.info(new String(ddd[1]));
-		}
 		
 		return rtr.replaceAll("\\s", "-");
 	}

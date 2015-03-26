@@ -3,32 +3,40 @@
  */
 package com.dartcrab.reports;
 
-import java.io.FileOutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.nio.charset.StandardCharsets;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import javax.persistence.*;
 
 /**
  * @author Gi
  *
  */
+
+
+@Entity
+@Table
 public class ReportWebDoc {
-	private static Logger log = LoggerFactory.getLogger( ReportWebDoc.class );
+	@Id
+	private String rcpNo;
+
+	@OneToOne
+	@JoinColumn(name="rcpNo")
+	private ReportHeader  	header;		
 	
-	private ReportHeader  	header;				
+	@Lob
 	private String 			contents;
 	
-	public ReportWebDoc(ReportHeader  header, String contents) {
-		super();
+	public void setHeader(ReportHeader header) {
 		this.header = header;
+		this.rcpNo = header.getRcpNo();
+	}
+
+	public void setContents(String contents) {
 		this.contents = contents;
 	}
-	
+
 	public ReportHeader getHeader() {
-		return header;
+		return null;
+		//return header;
 	}
 
 	public String getContents() {
@@ -36,23 +44,23 @@ public class ReportWebDoc {
 	}
 	
 	
-	/**
-	 * TO_DO
-	 */
-	public ReportWebDoc storeFile(){
-		try{
-			
-			
-			PrintWriter out = new PrintWriter("target/data/"+header.getRcpNo()+".html"); // To do: Parameterize the default file location 
-					/*new OutputStreamWriter
-							(new FileOutputStream("target/data/"+header.getRcpNo()+".html"),
-	                StandardCharsets.UTF_8), true*/
-			out.print(contents);
-			out.close();
-			log.info("Report HTML stored: "+"target/data/"+header.getRcpNo()+".html");
-		} catch (Exception e){
-			e.printStackTrace();
-		}
-		return this;
+
+	public ReportWebDoc() {
+	super();
 	}
+
+	public ReportWebDoc(ReportHeader  header, String contents) {
+		super();
+		this.rcpNo	= header.getRcpNo();
+		this.header = header;
+		this.contents = contents;
+	}
+	
+	public ReportWebDoc(String rcpNo, String contents) {
+		super();
+		this.rcpNo = rcpNo;
+		// To-Do
+		this.contents = contents;
+		}
+	
 }

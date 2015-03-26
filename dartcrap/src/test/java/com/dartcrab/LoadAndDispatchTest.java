@@ -1,4 +1,4 @@
-package com.dartcrap;
+package com.dartcrab;
 
 import static org.junit.Assert.assertEquals;
 
@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -26,12 +27,12 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.dartcrab.Book;
 import com.dartcrab.extractor.ExtractorDispatcher;
 import com.dartcrab.extractor.ReportExtractor;
 import com.dartcrab.reports.ReportHeader;
 import com.dartcrab.reports.ReportSearchRequest;
 import com.dartcrab.reports.ReportSearchResponse;
+import com.dartcrab.reports.ReportWebDoc;
 import com.dartcrab.reports.ReportWebDocFactory;
 
 
@@ -52,13 +53,18 @@ public class LoadAndDispatchTest {
 
 	@Before
 	public void setUp() {
+		System.setProperty("http.proxyHost", "54.225.133.44");
+		System.setProperty("http.proxyPort", "8118");
+		System.setProperty("https.proxyHost", "54.225.133.44");
+		System.setProperty("https.proxyPort", "8118");
 		
-		//initHibernate();
+		
+		initHibernate();
 		
 		try{ 
 			this.properties = new java.util.Properties();
 			FileInputStream in = new FileInputStream("src/main/resources"
-					+ "/dartcrap.properties");
+					+ "/dartcrab.properties");
 			this.properties.load(in);
 			in.close();
 		} catch (Exception e){
@@ -68,76 +74,93 @@ public class LoadAndDispatchTest {
 
 	@After
 	public void tearDown() {
-		//purge();
+		purge();
 	}
 
 	@Test
-	public void searchReport() throws Exception {
-		
-		/*System.setProperty("http.proxyHost", "104.223.3.223");
-		System.setProperty("http.proxyPort", "7808");
-		System.setProperty("https.proxyHost", "104.223.3.223");
-		System.setProperty("https.proxyPort", "7808");*/		
-		
+	public void searchReportStockOptionExec() throws Exception {
+				
 		ReportSearchRequest listRequest = new ReportSearchRequest()
 											.setAuth(properties.getProperty("auth"))
-											.setBsnDp("C003")		
-											.setCrpCd("016360")		 
-											.setStartDt("20150312")	
-											.setEndDt("20150312")	
+											.setBsnDp("I001")		
+											.setCrpCd("")		 
+											.setStartDt("20150101")	
+											.setEndDt("20150325")	
+											.setFinRpt("Y")
 											;
 		
 		log.info("Request: " + listRequest);
 		
 		ReportSearchResponse searchResult = listRequest.send();
 		
-		int i = 1;
-		
+		em.getTransaction().begin();
 		for (ReportHeader header: searchResult.extractReportHeaders()){
-	
-			ReportWebDocFactory.loadAndStoreReportWebDoc(header);
-		
-			if (i++ > 20) break; // I'd like to test first 20 reports only.
+			if(header.getRptNm().contains("주식매수선택권행사")) 
+				em.merge(header);
 		}
-		//assertEquals( "Should get empty list since nothing is indexed yet", 0, books.size() );
+		em.getTransaction().commit();
+	}
+
+	@Test
+	public void searchReportDls() throws Exception {
+				
+		ReportSearchRequest listRequest = new ReportSearchRequest()
+											.setAuth(properties.getProperty("auth"))
+											.setBsnDp("C003")		
+											.setCrpCd("")		 
+											.setStartDt("20150101")	
+											.setEndDt("20150325")	
+											.setFinRpt("Y")
+											;
+		
+		log.info("Request: " + listRequest);
+		
+		ReportSearchResponse searchResult = listRequest.send();
+		
+		em.getTransaction().begin();
+		for (ReportHeader header: searchResult.extractReportHeaders()){
+			if(header.getRptNm().contains("일괄신고추가서류")) 
+				em.merge(header);
+		}
+		em.getTransaction().commit();
 	}
 
 	
+	
 	@Test
 	public void extractReport() throws Exception {
-		// TO-DO
-		String[][] rcpList = {
-				{"20150312000239","일괄신고추가서류( 결합증권 )"}
-//				{"20150303900342","주식매수선택권행사"}
-			};
+
+		em.getTransaction().begin();
 		
-		ReportExtractor extractor = null;
 		
-		for (String[] rcpHeader : rcpList){
-			//TO-DO
-			ReportHeader header = new ReportHeader(rcpHeader[0], null, null,null, rcpHeader[1], null, null,null);
-			
-			extractor = ExtractorDispatcher.getInstance()
-						.dispatch(
-								ReportWebDocFactory
-								.loadAndStoreReportWebDoc(header)
-								);
-					
-			if (extractor != null) extractor.extract();
+		@SuppressWarnings("unchecked")
+		List<ReportHeader> headers = (List<ReportHeader>) em.createQuery(
+				"select h from ReportHeader h")
+				.getResultList();
+		
+//		ReportExtractor extractor = null;
+	
+		for (ReportHeader header : headers){
+			log.info(header.getRcpNo());
+			ReportWebDoc doc = ReportWebDocFactory.loadAndPersistReportWebDoc(header.getRcpNo());
+//			extractor = ExtractorDispatcher.getInstance()
+//						.dispatch();
+//					
+//			if (extractor != null) extractor.extract();
+//			log.info("before");
+//			Thread.sleep(new Random().nextInt(0)+0);
+//			log.info("after");
 		}	
 	
 	}
 
 	private void initHibernate() {
-		emf = Persistence.createEntityManagerFactory( "dartcrap-persistence" );
+		emf = Persistence.createEntityManagerFactory( "dartcrab-persistence" );
 		em = emf.createEntityManager();
 	}
 
 	private void purge() {
-		FullTextEntityManager ftEm = org.hibernate.search.jpa.Search.getFullTextEntityManager( em );
-		ftEm.purgeAll( Book.class );
-		ftEm.flushToIndexes();
-		ftEm.close();
+
 		emf.close();
 	}
 

@@ -9,11 +9,6 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mysql.jdbc.log.Log;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * 
  * @author Gi
@@ -45,7 +40,7 @@ public class ReportSearchResponse {
 	 * TO-DO
 	 */
 	public List<ReportHeader> extractReportHeaders() {
-		List<ReportHeader> headers = new LinkedList();
+		List<ReportHeader> headers = new LinkedList<ReportHeader>();
 		
 		for (Document d: searchResponseXml){
 			Elements elements = d.select("list");

@@ -22,6 +22,6 @@ public class DartCrabSettings {
 	
 	
 	public final static String VIEW_DOC_MATCHER = "javascript: viewDoc\\('@@RCP_NO@@', '([0-9]*)', null, null, null, '(.*)'";
-	private static volatile DartCrabSettings instance = null;
+	
 	private DartCrabSettings(){}
 }
