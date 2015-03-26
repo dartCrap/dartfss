@@ -5,6 +5,19 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+
+/**
+ * DLS 정보를 담기위한 별도 Entity
+ * 
+ * 주의: 이 객체는 GenericDartReport와는 무관하다. GenericDartReport는 공시 보고서 자체를 모델링하지만
+ * 본 Class는 보고서 내에 포함되어 있는 개별 종목정보를 모델링한다.
+ * 
+ * 앞으로 정보의 상세화와 로직 개발이 많이 필요하다.
+ * 
+ * @author Gi Kim
+ * @since Mar-25-2015	
+ * @version 0.1
+ */
 public class Dls {
 
 	private	String			instTitle;				// 종목명
@@ -34,11 +47,9 @@ public class Dls {
 	private Date			maturitySttlDt;			// 만기상환금액지급일
 	private String			hedgeTrader;			// 헷지운용사
 	
-	
 	private	String			dlsClass;				// DLS 상품종류 ==> TO-BE
 	
 	
-	/* Option structure related something... */
 	public class RedemptionSchedule {  //--> To-do
 		int		id;							//temp
 		String	redemptionTriggerClass;		//temp
@@ -282,7 +293,4 @@ public class Dls {
 				+ matLossYield + ", earlyRedemptionSttlDays="
 				+ earlyRedemptionSttlDays + "]";
 	}
-	
-	
-	
 }

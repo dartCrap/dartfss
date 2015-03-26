@@ -13,11 +13,26 @@ import com.dartcrab.entities.GenericDartReport;
 import com.dartcrab.reports.ReportHeader;
 import com.dartcrab.util.DartHtmlProcessor;
 
+
+/**
+ * 주식매수선택권행사 공시 보고서 처리용
+ * 
+ * @author Gi Kim
+ * @version 1.0
+ * @since Mar-25-2015
+ */
 public class StockOptionExecReportExtractor extends ReportExtractor{
 	private static Logger log = LoggerFactory.getLogger( StockOptionExecReportExtractor.class );
 	
-	/**
-	 * TO-DO
+	/*
+	 * 현재의 구현 패턴은 다음과 같다.
+	 * 
+	 * - 우선 대부분의 정보는 <table/> 태그안에 포함되어 있다. 
+	 * - HTML 내에 존재하는 <table/>의 위치는 하나의 보고서 유형 안에서는 대부분 같다.
+	 * - 따라서 순서에 따라 각 테이블을 쪼갠 뒤, 테이블의 header와 content를 분리하여 DOM으로 만든다.
+	 *  (이는 상당히 공통적인 로직이므로 dartcrab.util.DartHtmlProcessor에 library화 하였다.
+	 *  보고서에 따라 특이한 테이블의 경우에는 각 Extractor내에서 구현하도록 한다.)
+	 *  - 일단 DOM으로 만들고 나면, 각 Node의 이름(한글)을 보고, 어떤 정보인지 파악하도록 한다.
 	 */
 	public GenericDartReport extract(){
 		StockOptionExecReport report =  new StockOptionExecReport(this.getDoc().getHeader());
@@ -34,15 +49,12 @@ public class StockOptionExecReportExtractor extends ReportExtractor{
 		// 행사주식수현황 / TO-DO
 		__processTable1(DartHtmlProcessor.parseHorizontalHeadingTable(table1.getElementsByTag("tr"),2,1)
 				,report);
-		
 			
 		// 일별행사내역
 		__processTable2(DartHtmlProcessor.parseHorizontalHeadingTable(table2.getElementsByTag("tr"),2)
 				,report);
 							
-		
 		// 주식매수선택권 잔여현황;
-						
 		__processTable3(DartHtmlProcessor.parseHorizontalHeadingTable(table3.getElementsByTag("tr"),2)
 				, report);
 		
@@ -56,7 +68,10 @@ public class StockOptionExecReportExtractor extends ReportExtractor{
 		log.info(report.toString());
 		return  (GenericDartReport) report;
 	}
-	
+
+	/* 개별 항목의 처리 로직
+	 * DOM 객체의 내용을 보고 판단하도록 한다.
+	 */
 	private StockOptionExecReport __processTable1(Element table,StockOptionExecReport report){
 		
 		report.setTotalIssueUnits(
@@ -95,7 +110,6 @@ public class StockOptionExecReportExtractor extends ReportExtractor{
 		
 		return report;
 	}
-	
 	
 	private StockOptionExecReport __processTable3(Element table,StockOptionExecReport report){
 		

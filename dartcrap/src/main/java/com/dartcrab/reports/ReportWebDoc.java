@@ -7,8 +7,11 @@ package com.dartcrab.reports;
 import javax.persistence.*;
 
 /**
- * @author Gi
- *
+ * Dart사이트에서 바로 가져오는 HTML 공시보고서를 모델링한다.
+ * 하나의 rcpNo는 하나의 HTML 보고서에 대응한다.
+ * 
+ * @author Gi Kim
+ * @since Mar-25-2015
  */
 
 

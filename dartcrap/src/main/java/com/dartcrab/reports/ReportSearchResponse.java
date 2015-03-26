@@ -10,30 +10,36 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * Dart의 OpenAPI로 전송한 Request에 대한 Response를 모델링한 Class이다.
  * 
- * @author Gi
- *
+ * @author Gi Kim
+ * @version 1.0
+ * @since Mar-25-2015
+ * 
  */
 public class ReportSearchResponse {
 	private static Logger log = LoggerFactory.getLogger( ReportSearchResponse.class );
 
 	private List<Document> searchResponseXml;		// XML response from "http://dart.fss.or.kr/api/search.xml?"
 
-	/**
-	 * TO-DO
-	 */
-	public List<ReportHeader> retrieveReportList(){
-		List<ReportHeader> reports = null;
-		return reports;
-	}
 
-	/**
-	 * 
-	 * @param searchReponseXml
+	/*
+	 * Constructors
 	 */
 	public ReportSearchResponse(List<Document> searchResponseXml) {
 		super();
 		this.searchResponseXml = searchResponseXml;
+	}
+	
+	
+	/**
+	 * OpenAPI에서 가져온 공시보고서를 ReportHeader객체의 List로 반환한다.
+	 * @return List<ReportHeader>
+	 */
+
+	public List<ReportHeader> retrieveReportList(){
+		List<ReportHeader> reports = null;
+		return reports;
 	}
 	
 	/**

@@ -17,17 +17,38 @@ import com.dartcrab.entities.GenericDartReport;
 import com.dartcrab.util.DartCrabSettings;
 import com.dartcrab.util.DartHtmlProcessor;
 
+
+/**
+ * 파생결합증권 공시 보고서 처리용
+ * 
+ * @author Gi Kim
+ * @version 1.0
+ * @since Mar-25-2015
+ */
 public class DlsIssueReportExtractor extends ReportExtractor {
 	private static Logger log = LoggerFactory.getLogger( DlsIssueReportExtractor.class );
 	
-	/**
-	 * TO-DO
+	/*
+	 * 현재의 구현 패턴은 다음과 같다.
+	 * 
+	 * - 우선 대부분의 정보는 <table/> 태그안에 포함되어 있다. 
+	 * - HTML 내에 존재하는 <table/>의 위치는 하나의 보고서 유형 안에서는 대부분 같다.
+	 * - 따라서 순서에 따라 각 테이블을 쪼갠 뒤, 테이블의 header와 content를 분리하여 DOM으로 만든다.
+	 *  (이는 상당히 공통적인 로직이므로 dartcrab.util.DartHtmlProcessor에 library화 하였다.
+	 *  보고서에 따라 특이한 테이블의 경우에는 각 Extractor내에서 구현하도록 한다.)
+	 *  - 일단 DOM으로 만들고 나면, 각 Node의 이름(한글)을 보고, 어떤 정보인지 파악하도록 한다.
+	 *  
+	 *  파생결합증권 공시의 경우에는 하나의 공시보고서 내에, 다수 종목의 발행이 함께 묶여있다.
+	 *  따라서 보고서의 내용을 다시 쪼개어 각각의 종목 정보로 나눌 필요가 있다.
+	 *  
 	 */
 	public GenericDartReport extract(){
 		DlsIssueReport report = new DlsIssueReport(this.getDoc().getHeader());
 		
-		/* TO-DO */
 		String	allHtml = this.getDoc().getContents();
+		
+		/* 우선 보고서를 쪼갠다. 
+		 * 아래와 같이 쪼개면  [0]은 일괄공시추가서류의 요약, [1] 이후는 각 종목별 보고서가 된다*/
 		String [] sectionString = allHtml.split("\\[ 모집 또는 매출의 개요 \\]");
 		
 		List<Elements>	sectionElements = new ArrayList<Elements>();
@@ -52,8 +73,6 @@ public class DlsIssueReportExtractor extends ReportExtractor {
 			
 			__processTable1(Jsoup.parse(table1).getAllElements(), dls);
 			
-			
-			
 			// 상황별 손익구조
 			String table2 = sectionString[i]
 					.substring(sectionString[i].indexOf("(1) 상황별 손익구조"));
@@ -73,7 +92,6 @@ public class DlsIssueReportExtractor extends ReportExtractor {
 			
 			this.__processTable3(Jsoup.parse(table3).getAllElements(),dls);
 
-
 			// 만기상환내역	
 			String table4 = sectionString[i]
 					.substring(sectionString[i].indexOf("- 만기상환내역"));
@@ -84,10 +102,9 @@ public class DlsIssueReportExtractor extends ReportExtractor {
 			
 			this.__processTable4(Jsoup.parse(table4).getAllElements(), dls);
 			
-			// post process
 			report.addDlsInfo(dls);
 		}
-		log.info(report.toString()); // temp
+		log.info(report.toString()); 
 		return  report;
 	}
 	
@@ -98,12 +115,7 @@ public class DlsIssueReportExtractor extends ReportExtractor {
 	}
 
 
-	/**
-	 * 
-	 * @param table
-	 * @param dls 
-	 * @return
-	 */
+	/* 개별 테이블 처리 로직 */
 	private void __processTable1(Elements table, Dls dls) {
 
 		Element interim = 
@@ -177,12 +189,6 @@ public class DlsIssueReportExtractor extends ReportExtractor {
 		
 	}
 	
-	/**
-	 * 
-	 * @param table
-	 * @param dls 
-	 * @return
-	 */
 	private void __processTable2(Elements table, Dls dls) {
 		Element interim = 
 				__parsePayOffStructure(table);
@@ -200,23 +206,11 @@ public class DlsIssueReportExtractor extends ReportExtractor {
 
 	}
 	
-	/**
-	 * 
-	 * @param table
-	 * @param dls 
-	 * @return
-	 */
 	private void __processTable3(Elements table, Dls dls) {
 		//log.info(table.toString());
 		// TO-DO
 	}	
 	
-	/**
-	 * 
-	 * @param table
-	 * @return 
-	 * @return
-	 */
 	private void __processTable4(Elements table, Dls dls) {
 		//log.info(table.toString());
 	}	

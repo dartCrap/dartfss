@@ -13,24 +13,16 @@
     -->
     <parent>
         <artifactId>hibernate-search-parent</artifactId>
-        <groupId>org.hibernate</groupId>
         <version>4.3.0.Alpha1</version>
+        <groupId>org.hibernate</groupId>
     </parent>
 
     <groupId>com.eugenefs</groupId>
     <artifactId>dartcrap</artifactId>
     <packaging>jar</packaging>
-    <name>Hibernate Search Quickstart</name>
+    <name>DartCrab</name>
     <version>0.0.1-SNAPSHOT</version>
-    <url>http://www.myorganization.org</url>
-    <description>Hibernate Search quickstart is an archetype for a minimal application using fulltext query
-        capabilities.</description>
 
-    <scm>
-        <connection>scm:git:git://github.com/hibernate/hibernate-search.git</connection>
-        <developerConnection>scm:git:git@github.com:hibernate/hibernate-search.git</developerConnection>
-        <url>http://github.com/hibernate/hibernate-search</url>
-    </scm>
 
     <organization>
         <name>Hibernate</name>
@@ -149,4 +141,5 @@
             </build>
         </profile>
     </profiles>
+    <description>Dart 사이트 공시파일의 정보를 추출하여 저장, 서비스</description>
 </project>

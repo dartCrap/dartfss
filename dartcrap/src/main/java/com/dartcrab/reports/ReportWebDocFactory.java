@@ -18,14 +18,20 @@ import org.slf4j.LoggerFactory;
 import com.dartcrab.util.DartCrabSettings;
 
 /**
- * 
- * @author Gi
- *
+ * 공시보고서 HTML을 추출하여 ReportWebDoc 객체로 관리
+ * @author Gi Kim
+ * @version 1.0
+ * @since Mar-25-2015
+ * @see ReportWebDoc
  */
 public class ReportWebDocFactory {
 	private static Logger log = LoggerFactory.getLogger( ReportWebDocFactory.class );
+
 	/**
-	 * TO-DO
+	 * Http로 Dart사이트에서 바로 HTML을 읽어온다.
+	 * 
+	 * @param rcpNo
+	 * @return
 	 */
 	public static ReportWebDoc loadHttpReportWebDoc (String rcpNo){
 		
@@ -35,7 +41,7 @@ public class ReportWebDocFactory {
 				Document doc = Jsoup.connect(DartCrabSettings.REPORT_URL
 					+"?rcpNo="+ rcpNo)
 					.userAgent(DartCrabSettings.USER_AGENT)
-					.timeout(1000000)
+					.timeout(DartCrabSettings.DEFAULT_TIME_OUT)
 					.get();
 				
 				Elements	viewdocScript = doc.getElementsByTag("script"); // Retrieve javascript only
@@ -74,8 +80,29 @@ public class ReportWebDocFactory {
 		return report;
 	}
 	
+
 	/**
-	 * Obsoleted
+	 * 우선 JPA 객체로 ReportWebDoc을 찾아보고 (즉 DB에서 search하고) 없으면 Http로 가져온다.
+	 * 일반적으로는 ReportWebDoc을 얻기 위해 이 함수를 사용해야 한다. 
+	 * @param rcpNo
+	 * @return
+	 */
+	public static ReportWebDoc loadAndPersistReportWebDoc (String rcpNo) {
+		EntityManager em = 
+				Persistence.createEntityManagerFactory( "dartcrab-persistence" ).createEntityManager();
+		ReportWebDoc result = em.find(ReportWebDoc.class, rcpNo);
+		if (result == null ) {
+			log.info("New ReportWebDoc");
+			result = loadHttpReportWebDoc(rcpNo);
+			em.getTransaction().begin();
+			em.persist(result);
+			em.getTransaction().commit();
+		}
+		return result;
+	}
+	
+	/**
+	 * @deprecated
 	 */
 	public static ReportWebDoc loadFileReportWebDoc (ReportHeader header) {
 		ReportWebDoc report = null;
@@ -91,22 +118,4 @@ public class ReportWebDocFactory {
 		}
 		return report;
 	}
-	
-	
-	/**
-	 * TO-DO
-	 */
-	public static ReportWebDoc loadAndPersistReportWebDoc (String rcpNo) {
-		EntityManager em = 
-				Persistence.createEntityManagerFactory( "dartcrab-persistence" ).createEntityManager();
-		ReportWebDoc result = em.find(ReportWebDoc.class, rcpNo);
-		if (result == null ) {
-			log.info("New ReportWebDoc");
-			result = loadHttpReportWebDoc(rcpNo);
-			em.getTransaction().begin();
-			em.persist(result);
-			em.getTransaction().commit();
-		}
-		return result;
-	}	
 }
