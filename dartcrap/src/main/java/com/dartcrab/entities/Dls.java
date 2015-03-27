@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-
 /**
  * DLS 정보를 담기위한 별도 Entity
  * 
@@ -19,7 +18,6 @@ import java.util.List;
  * @version 0.1
  */
 public class Dls {
-
 	private	String			instTitle;				// 종목명
 	private String[]		underlying; 			// 기초자산
 	
