@@ -7,15 +7,18 @@ import java.util.Random;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.dartcrab.extractor.ExtractorDispatcher;
 import com.dartcrab.reports.ReportHeader;
 import com.dartcrab.reports.ReportSearchRequest;
 import com.dartcrab.reports.ReportSearchResponse;
+import com.dartcrab.reports.ReportWebDoc;
 import com.dartcrab.reports.ReportWebDocFactory;
 
 
@@ -138,7 +141,7 @@ public class LoadAndDispatchTest {
 	 * @throws Exception
 	 */
 	@Test
-	public void extractReportWebDoc() throws Exception {
+	public void getReportWebDoc() throws Exception {
 
 		em.getTransaction().begin();
 		
@@ -164,7 +167,33 @@ public class LoadAndDispatchTest {
 	
 	}
 
+	/**
+	 * 
+	 * 공시보고서에서부터 정보를 추출하여 각 해당 Java class의 entity로 저장한다.
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void extractInfo() throws Exception {
 
+		em.getTransaction().begin();
+		
+		
+		@SuppressWarnings("unchecked")
+		List<ReportWebDoc> docs = em.createQuery(
+				"select d from ReportWebDoc d", ReportWebDoc.class)
+				.getResultList();
+	
+		for (ReportWebDoc doc : docs){
+			try{
+				ExtractorDispatcher.getInstance().dispatch(doc).extract();
+			}	catch (Exception e){
+				e.printStackTrace();
+			}
+
+		}	
+	
+	}
 	
 	// Private methods
 	private void initHibernate() {
