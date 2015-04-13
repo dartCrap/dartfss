@@ -70,10 +70,10 @@ public class Dls {
 					+ provisionText + ", yield=" + yield + "]";
 		}
 
-		public RedemptionSchedule(int id, String redemptionTriggerClass,
+		public RedemptionSchedule(int redemptionId, String redemptionTriggerClass,
 				String provisionText, float yield) {
 			super();
-			this.id = id;
+			this.redemptionId = redemptionId;
 			this.redemptionTriggerClass = redemptionTriggerClass;
 			this.provisionText = provisionText;
 			this.yield = yield;
