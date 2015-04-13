@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import javax.persistence.*;
 
 /**
  * DLS 정보를 담기위한 별도 Entity
@@ -17,7 +18,12 @@ import java.util.List;
  * @since Mar-25-2015	
  * @version 0.1
  */
+
+@Entity
+@Table
 public class Dls {
+	@Id
+	@GeneratedValue(strategy=GenerationType.TABLE)
 	private	String			instTitle;				// 종목명
 	private String[]		underlying; 			// 기초자산
 	
@@ -47,9 +53,12 @@ public class Dls {
 	
 	private	String			dlsClass;				// DLS 상품종류 ==> TO-BE
 	
-	
+	@Entity
+	@Table
 	public class RedemptionSchedule {  //--> To-do
-		int		id;							//temp
+		@Id
+		@GeneratedValue(strategy=GenerationType.TABLE)
+		int		redemptionId;							//temp
 		String	redemptionTriggerClass;		//temp
 		String	provisionText;				//temp
 		float	yield;						//temp
@@ -71,6 +80,9 @@ public class Dls {
 		}
 		
 	};
+	
+	@OneToMany(mappedBy="redemptionId")
+	@OrderBy("redemptionId")
 	private	List<RedemptionSchedule>  redemptionSchedule;	// temp 상환스케
 	
 	private	Date[]			underlyingEvalDt;		// 기준가격결정일

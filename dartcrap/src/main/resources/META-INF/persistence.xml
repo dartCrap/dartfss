@@ -6,14 +6,16 @@
              version="1.0">
 
     <persistence-unit name="dartcrab-persistence">
+        <provider>org.hibernate.ejb.HibernatePersistence</provider>
         <properties>
+        
 
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
             <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
-            <property name="hibernate.connection.username" value="dartcrab"/>
+            <property name="hibernate.connection.username" value="takion77"/>
             <property name="hibernate.connection.password" value="dartcrab"/>
          	<property name="hibernate.connection.characterEncoding" value="utf8"/>
-            <property name="hibernate.connection.url" value="jdbc:mysql://10.0.0.14/dartcrab"/>
+            <property name="hibernate.connection.url" value="jdbc:mysql://mysql5.hosting.bizfree.kr/takion77_db"/>
 
             <property name="hibernate.hbm2ddl.auto" value="update"/>
 

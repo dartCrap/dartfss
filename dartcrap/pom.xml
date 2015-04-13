@@ -12,9 +12,9 @@
         <parent> entry. See also the other pointers in this pom!
     -->
     <parent>
-        <artifactId>hibernate-search-parent</artifactId>
-        <version>4.3.0.Alpha1</version>
+        <artifactId>hibernate-parent</artifactId>
         <groupId>org.hibernate</groupId>
+        <version>3.6.10.Final</version>
     </parent>
 
     <groupId>com.eugenefs</groupId>
@@ -38,43 +38,19 @@
 
     <developers>
         <developer>
-            <id>epbernard</id>
-            <name>Emmanuel Bernard</name>
-            <email>emmanuel@hibernate.org</email>
-            <url>http://in.relation.to/Bloggers/Emmanuel</url>
+            <id>nezach</id>
+            <name>Gi Ryoong Kim</name>
+            <email>gi.ryoong.kim@gmail.com</email>
+            <url></url>
         </developer>
-        <developer>
-            <id>hardy.ferentschik</id>
-            <name>Hardy Ferentschik</name>
-            <email>hardy@hibernate.org</email>
-            <url>http://in.relation.to/Bloggers/Hardy</url>
-        </developer>
-        <developer>
-            <id>sannegrinovero</id>
-            <name>Sanne Grinovero</name>
-            <email>sanne@hibernate.org</email>
-            <url>http://in.relation.to/Bloggers/Sanne</url>
-        </developer>
-    </developers>
-
+        
     <dependencies>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-search</artifactId>
-            <!-- When removing the <parent> node you will have to explicitly set the hibernate-search version -->
-            <version>${project.parent.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-search-analyzers</artifactId>
-            <!-- When removing the <parent> node you will have to explicitly set the hibernate-search version -->
-            <version>${project.parent.version}</version>
-        </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-entitymanager</artifactId>
             <!-- When removing the <parent> node you have to explicitly set the Hibernate Entity Manager version -->
             <!--<version></version>-->
+            <version>4.2.0.Final</version>
         </dependency>
         <dependency>
             <groupId>hsqldb</groupId>
@@ -90,6 +66,7 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
+            <version>4.8.2</version>
         </dependency>
         <dependency>
         	<groupId>mysql</groupId>
@@ -142,4 +119,37 @@
         </profile>
     </profiles>
     <description>Dart 사이트 공시파일의 정보를 추출하여 저장, 서비스</description>
+</developers>
+    <dependencies>
+    	<dependency>
+    		<groupId>org.jsoup</groupId>
+    		<artifactId>jsoup</artifactId>
+    		<version>1.7.3</version>
+    	</dependency>
+    	<dependency>
+    		<groupId>junit</groupId>
+    		<artifactId>junit</artifactId>
+    		<version>4.8.2</version>
+    	</dependency>
+    	<dependency>
+    		<groupId>org.slf4j</groupId>
+    		<artifactId>slf4j-log4j12</artifactId>
+    		<version>1.6.1</version>
+    	</dependency>
+    	<dependency>
+    		<groupId>org.hibernate</groupId>
+    		<artifactId>hibernate-entitymanager</artifactId>
+    		<version>4.2.0.Final</version>
+    	</dependency>
+    	<dependency>
+    		<groupId>org.hibernate</groupId>
+    		<artifactId>hibernate-core</artifactId>
+    		<version>4.2.17.SP1-redhat-1</version>
+    	</dependency>
+    	<dependency>
+    		<groupId>mysql</groupId>
+    		<artifactId>mysql-connector-java</artifactId>
+    		<version>5.1.35</version>
+    	</dependency>
+    </dependencies>
 </project>
