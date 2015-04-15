@@ -15,7 +15,7 @@
             <property name="hibernate.connection.username" value="dartcrab"/>
             <property name="hibernate.connection.password" value="dartcrab"/>
          	<property name="hibernate.connection.characterEncoding" value="utf8"/>
-            <property name="hibernate.connection.url" value="jdbc:mysql://dartcrab.cm9lbb0tnku9.us-west-2.rds.amazonaws.com/dartcrab"/>
+            <property name="hibernate.connection.url" value="jdbc:mysql://dartcrab.cm9lbb0tnku9.us-west-2.rds.amazonaws.com/dartcrab?useCursorFetch=true"/>
 
             <property name="hibernate.hbm2ddl.auto" value="update"/>
 

@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 import javax.persistence.*;
 
 /**
@@ -24,6 +25,19 @@ import javax.persistence.*;
 public class Dls {
 	@Id
 	@GeneratedValue(strategy=GenerationType.TABLE)
+	private	Long			dlsId;
+	
+	@ManyToOne
+	private DlsIssueReport		dlsReport;
+	
+	public DlsIssueReport getDlsReport() {
+		return dlsReport;
+	}
+	public void setDlsReport(DlsIssueReport dlsReport) {
+		this.dlsReport = dlsReport;
+	}
+
+
 	private	String			instTitle;				// 종목명
 	private String[]		underlying; 			// 기초자산
 	
@@ -54,14 +68,28 @@ public class Dls {
 	private	String			dlsClass;				// DLS 상품종류 ==> TO-BE
 	
 	@Entity
-	@Table
-	public class RedemptionSchedule {  //--> To-do
+	public static class RedemptionSchedule {  //--> To-do
 		@Id
 		@GeneratedValue(strategy=GenerationType.TABLE)
-		int		redemptionId;							//temp
+		Long	redemptionId;				//temp
+		
+		int		idx;
+		
+		@ManyToOne
+		Dls		dls;
+		
+		public Dls getDls() {
+			return dls;
+		}
+
+		public RedemptionSchedule setDls(Dls dls) {
+			this.dls = dls;
+			return this;
+		}
+
 		String	redemptionTriggerClass;		//temp
 		String	provisionText;				//temp
-		float	yield;						//temp
+		String	yield;						//temp
 		
 		@Override
 		public String toString() {
@@ -69,20 +97,54 @@ public class Dls {
 					+ redemptionTriggerClass + ", provisionText="
 					+ provisionText + ", yield=" + yield + "]";
 		}
-
-		public RedemptionSchedule(int redemptionId, String redemptionTriggerClass,
-				String provisionText, float yield) {
-			super();
-			this.redemptionId = redemptionId;
-			this.redemptionTriggerClass = redemptionTriggerClass;
-			this.provisionText = provisionText;
-			this.yield = yield;
-		}
 		
+		public RedemptionSchedule() {
+			super();
+		}
+
+		public Long getRedemptionId() {
+			return redemptionId;
+		}
+	
+		public int getIdx() {
+			return idx;
+		}
+
+		public RedemptionSchedule setIdx(int idx) {
+			this.idx = idx;
+			return this;
+		}
+
+		public String getRedemptionTriggerClass() {
+			return redemptionTriggerClass;
+		}
+
+		public RedemptionSchedule setRedemptionTriggerClass(String redemptionTriggerClass) {
+			this.redemptionTriggerClass = redemptionTriggerClass;
+			return this;
+		}
+
+		public String getProvisionText() {
+			return provisionText;
+		}
+
+		public RedemptionSchedule setProvisionText(String provisionText) {
+			this.provisionText = provisionText;
+			return this;
+		}
+
+		public String getYield() {
+			return yield;
+		}
+
+		public RedemptionSchedule setYield(String yield) {
+			this.yield = yield;
+			return this;
+			
+		}
 	};
 	
-	@OneToMany(mappedBy="redemptionId")
-	@OrderBy("redemptionId")
+	@OneToMany(mappedBy="dls", cascade=CascadeType.ALL,orphanRemoval=true)
 	private	List<RedemptionSchedule>  redemptionSchedule;	// temp 상환스케
 	
 	private	Date[]			underlyingEvalDt;		// 기준가격결정일
@@ -263,18 +325,22 @@ public class Dls {
 	}
 	
 	public void addRedemptionSchedule(
-			int		id							//temp
+			int		idx							//temp
 			,String	redemptionTriggerClass		//temp
 			,String	provisionText				//temp
-			,float	yield
+			,String	yield
 			) {
 		if (this.redemptionSchedule == null) this.redemptionSchedule = new ArrayList<RedemptionSchedule>();
 		
 		this.redemptionSchedule.add(
-				new RedemptionSchedule(
-						id, redemptionTriggerClass,provisionText,yield
+				new RedemptionSchedule()
+					.setIdx(idx)
+					.setRedemptionTriggerClass(redemptionTriggerClass)
+					.setProvisionText(provisionText)
+					.setYield(yield)
+					.setDls(this)
 					)
-				);
+				;
 	}
 	@Override
 	public String toString() {
@@ -302,5 +368,9 @@ public class Dls {
 				+ ", maxProfitYield=" + maxProfitYield + ", matLossYield="
 				+ matLossYield + ", earlyRedemptionSttlDays="
 				+ earlyRedemptionSttlDays + "]";
+	}
+	
+	public Dls() {
+		super();
 	}
 }

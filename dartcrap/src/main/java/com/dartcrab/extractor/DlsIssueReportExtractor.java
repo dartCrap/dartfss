@@ -60,12 +60,12 @@ public class DlsIssueReportExtractor extends ReportExtractor {
 		//  각 종목별 발행 정보
 		for (int i = 1 ; i < sectionString.length; i++){  // Divide...
 			Dls dls = new Dls();
-			
+			dls.setDlsReport(report);
 			sectionElements.add(Jsoup.parse(sectionString[i]).getAllElements());
 			
 			// 모집 또는 매출의 개요
 			String table1 = sectionString[i]
-						.substring(sectionString[i].indexOf("<p> &nbsp;<br />(2) 모집 또는 매출의 개요<br /> </p>"));
+						.substring(sectionString[i].indexOf("(2) 모집 또는 매출의 개요"));
 			
 			table1 = table1.substring(table1.indexOf("<table"));
 			
@@ -74,24 +74,30 @@ public class DlsIssueReportExtractor extends ReportExtractor {
 			__processTable1(Jsoup.parse(table1).getAllElements(), dls);
 			
 			// 상황별 손익구조
-			String table2 = sectionString[i]
-					.substring(sectionString[i].indexOf("(1) 상황별 손익구조"));
-		
-			table2 = table2.substring(table2.indexOf("<table"));
-		
-			table2 = table2.substring(0, table2.indexOf("</table>")+"</table>".length());
+			try{
+				String table2 = sectionString[i]
+						.substring(sectionString[i].indexOf("(1) 상황별 손익구조"));
 			
-			__processTable2(Jsoup.parse(table2).getAllElements(), dls);
+				table2 = table2.substring(table2.indexOf("<table"));
 			
+				table2 = table2.substring(0, table2.indexOf("</table>")+"</table>".length());
+				
+				__processTable2(Jsoup.parse(table2).getAllElements(), dls);
+			} catch (Exception e){
+				log.error(this.getDoc().getHeader().getRcpNo()+" has no [상황별 손익구조]");
+			}
 			// 최초기준가격 및 자동조기상환 내역
-			String table3 = sectionString[i]
-					.substring(sectionString[i].indexOf("- 최초기준가격 및 자동조기상환내역"));
-		
-			table3 = table3.substring(table3.indexOf("<table"));
-			table3 = table3.substring(0, table3.indexOf("</table>")+"</table>".length());
+			try{
+				String table3 = sectionString[i]
+						.substring(sectionString[i].indexOf("- 최초기준가격 및 자동조기상환내역"));
 			
-			this.__processTable3(Jsoup.parse(table3).getAllElements(),dls);
-
+				table3 = table3.substring(table3.indexOf("<table"));
+				table3 = table3.substring(0, table3.indexOf("</table>")+"</table>".length());
+				
+				this.__processTable3(Jsoup.parse(table3).getAllElements(),dls);
+			} catch (Exception e){
+				log.error(this.getDoc().getHeader().getRcpNo()+" has no [최초기준가격 및 자동조기상환내역]");
+			}
 			// 만기상환내역	
 			String table4 = sectionString[i]
 					.substring(sectionString[i].indexOf("- 만기상환내역"));
@@ -121,51 +127,103 @@ public class DlsIssueReportExtractor extends ReportExtractor {
 		Element interim = 
 				DartHtmlProcessor.parseVerticalHeadingTable(table);
 		
-		
 		dls.setInstTitle(interim.select("종목명").text());
-		
+			
 		dls.setUnderlying(interim.select("기초자산").text().replace("&amp;","&").split(" 및 "));
-
-		dls.setTotalIssueAmt(
-				Long.parseLong(
-						interim.select("모집총액").text().replace(",","").replace("원","").trim()));
-		dls.setUnitParPrice(
-				Integer.parseInt(
-						interim.select("좌당액면가액").text().replace(",","").replace("원","").trim()));
-		dls.setUnitIssuePrice(
-				Integer.parseInt(
-						interim.select("좌당발행가액").text().replace(",","").replace("원","").trim()));
-		dls.setTotalIssueUnits(
-				Integer.parseInt(
-						interim.select("발행수량").text().replace(",","").replace("좌","").trim()));
-		dls.setSubscriptionStrtDt(
-				Date.valueOf(
-						interim.select("청약시작일").text().replaceAll("\\[|\\]","").replace("일", "").replaceAll("[^0-9]+","-")));
-		dls.setSubscriptionEndDt(
-				Date.valueOf(
-						interim.select("청약종료일").text().replaceAll("\\[|\\]","").replace("일", "").replaceAll("[^0-9]+","-")));
-		dls.setSubscriptionSttlDt(
-				Date.valueOf(
-						interim.select("납입일").text().replaceAll("\\[|\\]","").replace("일", "").replaceAll("[^0-9]+","-")));
-		dls.setSubscriptionDlvrDt(
-				Date.valueOf(
-						interim.select("배정및환불일").text().replaceAll("\\[|\\]","").replace("일", "").replaceAll("[^0-9]+","-")));
-		dls.setIssueDt(
-				Date.valueOf(
-						interim.select("발행일").text().replaceAll("\\[|\\]","").replace("일", "").replaceAll("[^0-9]+","-")));
+	
+		try{
+			dls.setTotalIssueAmt(
+					Long.parseLong(
+							"0"+ interim.select("모집총액").text().replace(",","").replace("원","").trim()));
+		} catch (NumberFormatException e){
+			log.error(e.getMessage());
+		}
+		
+		try{
+			dls.setUnitParPrice(
+					Integer.parseInt(
+							"0"+interim.select("좌당액면가액").text().replace(",","").replace("원","").trim()));
+		} catch (NumberFormatException e) {
+			log.error(e.getMessage());
+		}
+		
+		try{
+			dls.setUnitIssuePrice(
+					Integer.parseInt(
+							"0"+interim.select("좌당발행가액").text().replace(",","").replace("원","").trim()));
+		} catch (NumberFormatException e) {
+			log.error(e.getMessage());
+		}
+		
+		try{
+			dls.setTotalIssueUnits(
+					Integer.parseInt(
+							"0"+interim.select("발행수량").text().replace(",","").replace("좌","").replace("(예정)","").trim()));
+		} catch (NumberFormatException e) {
+			log.error(e.getMessage());
+		}
+		
+		try{
+			dls.setSubscriptionStrtDt(
+					Date.valueOf(
+							interim.select("청약시작일").text().replaceAll("\\[|\\]","").replace("일", "").replaceAll("[^0-9]+","-")));
+		} catch (IllegalArgumentException e) {
+			log.error("Invalid date format");
+		}
+		
+		try{
+			dls.setSubscriptionEndDt(
+					Date.valueOf(
+							interim.select("청약종료일").text().replaceAll("\\[|\\]","").replace("일", "").replaceAll("[^0-9]+","-")));
+		} catch (IllegalArgumentException e) {
+			log.error("Invalid date format");
+		}
+		
+		try{
+			dls.setSubscriptionSttlDt(
+					Date.valueOf(
+							interim.select("납입일").text().replaceAll("\\[|\\]","").replace("일", "").replaceAll("[^0-9]+","-")));
+		} catch (IllegalArgumentException e) {
+			log.error("Invalid date format");
+		}
+		
+		try{
+			dls.setSubscriptionDlvrDt(
+					Date.valueOf(
+							interim.select("배정및환불일").text().replaceAll("\\[|\\]","").replace("일", "").replaceAll("[^0-9]+","-")));
+		} catch (IllegalArgumentException e) {
+			log.error("Invalid date format");
+		}
+		
+		try{
+			dls.setIssueDt(
+					Date.valueOf(
+							interim.select("발행일").text().replaceAll("\\[|\\]","").replace("일", "").replaceAll("[^0-9]+","-")));
+		} catch (IllegalArgumentException e) {
+			log.error("Invalid date format");
+		}
+		
 		dls.setListedExchange(
 				interim.select("증권의상장여부").text());
-		
-		
 		dls.setEarlyRedemptionSttlMethod(
 				interim.select("자동조기상환시결제방법").text());
-		
-		dls.setMaturityDt(
+
+		try {
+			dls.setMaturityDt(
+					Date.valueOf(
+							interim.select("만기일").text().replaceAll("\\[|\\]","").replace("일", "").replaceAll("[^0-9]+","-")));
+		} catch (IllegalArgumentException e) {
+			log.error("Invalid date format");
+		}
+		try{
+			dls.setMaturityDt(
 				Date.valueOf(
 						interim.select("만기일_예정").text().replaceAll("\\[|\\]","").replace("일", "").replaceAll("[^0-9]+","-")));
-
+		} catch (IllegalArgumentException e) {
+			log.error("Invalid date format");
+		}
 		
-		{// 만기평가일. 보통 특정 영업일이지만, 3개 영업일의 평균가격을 사용하는 경우가 있음
+		try{// 만기평가일. 보통 특정 영업일이지만, 3개 영업일의 평균가격을 사용하는 경우가 있음
 			String 	str = interim.select("만기평가일_예정").text().replaceAll("\\p{Z}", "").replaceAll("\\[|\\]", "").replace("일", "").replaceAll(",","Z").replaceAll("[^0-9Z]","-");
 			String [] dateStr = str.split("Z");
 			Date [] dates  = new Date[dateStr.length];
@@ -174,17 +232,22 @@ public class DlsIssueReportExtractor extends ReportExtractor {
 				dates[i] = Date.valueOf(dateStr[i]);
 			}
 			dls.setMaturityEvalDt(dates);
+		}catch (Exception e){
+			log.info(this.getDoc().getHeader().getRcpNo()+ " does not have MaturityEvalDt");
 		}
 		
-		dls.setMaturitySttlDt(
-						Date.valueOf(interim.select("만기상환금액지급일_예정").text().replaceAll("\\[|\\]","").replace("일", "").replaceAll("[^0-9]+","-")));
+		try{
+			dls.setMaturitySttlDt(
+							Date.valueOf(interim.select("만기상환금액지급일_예정").text().replaceAll("\\[|\\]","").replace("일", "").replaceAll("[^0-9]+","-")));
+		} catch (IllegalArgumentException e) {
+			log.error("Invalid date format");
+		}
 		
 		dls.setMaturitySettlMethod(
 				interim.select("만기시결제방법").text());
 		
 		dls.setHedgeTrader(
 				interim.select("헤지운용사").text());
-		
 		
 		
 	}
@@ -200,7 +263,12 @@ public class DlsIssueReportExtractor extends ReportExtractor {
 					Integer.parseInt(e.val())
 					,e.getElementsByTag("type").text()
 					,e.getElementsByTag("provision").text()
-					,Float.parseFloat(e.getElementsByTag("yield").text().split("%")[0].replaceAll("연 ",""))/100
+					, e.getElementsByTag("yield").text()
+// TO-DO: 수익률 지정 방식이 다양하므로 추가 검토 필요
+//					Float.parseFloat(
+//								e.getElementsByTag("yield").text().split("%")[0].replaceAll("연 ","")
+//								.replaceAll("\\[.*?\\]","9999")   // 수익률이 지정되지 않고 해당 월수익 금액인 경우가 있음
+//							)/100
 					);
 		}
 
@@ -226,36 +294,40 @@ public class DlsIssueReportExtractor extends ReportExtractor {
 		Element cursor = null;
 		
 		int i = 0;
-		
-		for (Element e : tbodyTr){
-			switch (e.children().size()){
-				case 1:		
-					cursor = tableTarget.appendElement("case").val(i++ +"");
-					cursor.appendElement("type").text(type);
-					cursor.appendElement("provision").text(e.child(0).text());
-					cursor.appendElement("yield").text(value);
-					break;
-				case 2:
-					value = e.child(1).text();
-					cursor = tableTarget.appendElement("case").val(i++ +"");
-					cursor.appendElement("type").text(type);
-					cursor.appendElement("provision").text(e.child(0).text());
-					cursor.appendElement("yield").text(value);		
-					break;
-				case 3:
-					if ( i == 0 ) {i++;break;}
-					type = e.child(0).text().replaceAll("\\p{Z}", "").replaceAll("/","_");	
-					value = e.child(2).text();
-					
-					cursor = tableTarget.appendElement("case").val(i++ +"");
-					cursor.appendElement("type").text(type);
-					cursor.appendElement("provision").text(e.child(1).text());
-					cursor.appendElement("yield").text(value);
-					break;
-				default:
-					log.error("Invalid payoff layout");
+		try{
+			for (Element e : tbodyTr){
+				switch (e.children().size()){
+					case 1:		
+						cursor = tableTarget.appendElement("case").val(i++ +"");
+						cursor.appendElement("type").text(type);
+						cursor.appendElement("provision").text(e.child(0).text());
+						cursor.appendElement("yield").text(value);
+						break;
+					case 2:
+						value = e.child(1).text();
+						cursor = tableTarget.appendElement("case").val(i++ +"");
+						cursor.appendElement("type").text(type);
+						cursor.appendElement("provision").text(e.child(0).text());
+						cursor.appendElement("yield").text(value);		
+						break;
+					case 3:
+						if ( i == 0 ) {i++;break;}
+						type = e.child(0).text().replaceAll("\\p{Z}", "").replaceAll("/","_");	
+						value = e.child(2).text();
+						
+						cursor = tableTarget.appendElement("case").val(i++ +"");
+						cursor.appendElement("type").text(type);
+						cursor.appendElement("provision").text(e.child(1).text());
+						cursor.appendElement("yield").text(value);
+						break;
+					default:
+						log.error("Invalid payoff layout");
+				}
 			}
+		}catch (Exception xx){   // TO-DO
+			log.error(tbodyTr.toString());
 		}
+		
 		
 		return tableTarget;
 	}

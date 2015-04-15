@@ -1,14 +1,30 @@
 package com.dartcrab.entities;
 
+import java.io.Serializable;
 import java.sql.Date;
 import java.util.List;
 import java.util.ArrayList;
 
+import javax.persistence.*;
+
 import com.dartcrab.reports.ReportHeader;
 
+@Entity
+@Table
+@DiscriminatorValue("SO")
 public class StockOptionExecReport extends GenericDartReport{
-	private class ExecDetail {
+	@Entity
+	private class ExecDetail implements Serializable{
+		/**
+		 * Generated SerialVersionId
+		 */
+		private static final long serialVersionUID = -8899198352637457834L;
+		
+		@Id
+		String	rcpNo;		
+		@Id
 		Date	execDate;			// 행사일
+		
 		String	ownerName;			// 행사자명/법인명
 		String	relationship;		// 회사와의관계
 		float	execPrice;			// 행사가
@@ -56,8 +72,10 @@ public class StockOptionExecReport extends GenericDartReport{
 	private int newSharesRemainingUnits;		// 잔여 신규발행교부주식수
 	private int cashSettleRemainingUnits;		// 잔여 차액보상주식
 	
+	@OneToMany(mappedBy="rcpNo")
 	private List<ExecDetail> execDetailList;	// 일별행사내역
 	
+	@OneToMany(mappedBy="rcpNo")
 	private List<ReportHeader>	relatedReports; // 관련공시 보고서번호
 	
 	

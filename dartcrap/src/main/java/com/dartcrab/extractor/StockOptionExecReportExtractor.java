@@ -75,19 +75,19 @@ public class StockOptionExecReportExtractor extends ReportExtractor{
 	private StockOptionExecReport __processTable1(Element table,StockOptionExecReport report){
 		
 		report.setTotalIssueUnits(
-					Integer.parseInt(table.getElementsByTag("총발행주식수_주").text().replace(",", "").replace("-", "0"))
+					Integer.parseInt("0"+table.getElementsByTag("총발행주식수_주").text().replace(",", "").replace("-", "0"))
 				);
 		report.setNewSharesDistributedUnits(
-					Integer.parseInt(table.getElementsByTag("신주교부").text().replace(",", "").replace("-", "0"))
+					Integer.parseInt("0"+table.getElementsByTag("신주교부").text().replace(",", "").replace("-", "0"))
 				);
 		report.setTreasuryStockDistributedUnits(
-					Integer.parseInt(table.getElementsByTag("자기주식교부").text().replace(",", "").replace("-", "0"))
+					Integer.parseInt("0"+table.getElementsByTag("자기주식교부").text().replace(",", "").replace("-", "0"))
 				);
 		report.setCashSettlePaidUnits(
-					Integer.parseInt(table.getElementsByTag("차액보상").text().replace(",", "").replace("-", "0"))
+					Integer.parseInt("0"+table.getElementsByTag("차액보상").text().replace(",", "").replace("-", "0"))
 				);
 		report.setExecRatio(
-					Float.parseFloat(table.getElementsByTag("행사비율").text().replace(",", "").replace("-", "0").replace("%",""))/100
+					Float.parseFloat("0"+table.getElementsByTag("행사비율").text().replace(",", "").replace("-", "0").replace("%",""))/100
 				);
 		return report;
 	}
@@ -114,11 +114,11 @@ public class StockOptionExecReportExtractor extends ReportExtractor{
 	private StockOptionExecReport __processTable3(Element table,StockOptionExecReport report){
 		
 		report.setNewSharesRemainingUnits(
-				Integer.parseInt(table.getElementsByTag("신주교부_주").text().replace(",", "").replace("-", "0")));
+				Integer.parseInt("0"+table.getElementsByTag("신주교부_주").text().replace(",", "").replace("-", "0")));
 		report.setTreasuryStockRemainingUnits(
-				Integer.parseInt(table.getElementsByTag("자기주식교부_주").text().replace(",", "").replace("-", "0")));
+				Integer.parseInt("0"+table.getElementsByTag("자기주식교부_주").text().replace(",", "").replace("-", "0")));
 		report.setCashSettleRemainingUnits(
-				Integer.parseInt(table.getElementsByTag("차액보상_주").text().replace(",", "").replace("-", "0")));
+				Integer.parseInt("0"+table.getElementsByTag("차액보상_주").text().replace(",", "").replace("-", "0")));
 		
 		return report;
 	}

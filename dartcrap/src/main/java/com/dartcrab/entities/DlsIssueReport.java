@@ -5,8 +5,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.dartcrab.reports.ReportHeader;
+import javax.persistence.*;
 
+@Entity
+@Table
+@DiscriminatorValue("DLS")
 public class DlsIssueReport extends GenericDartReport{
+
+	@OneToMany(mappedBy="dlsReport", cascade=CascadeType.ALL, orphanRemoval=true)
 	private List<Dls>	dlsIssueList;
 	
 	private Date		registrationDate; // 일괄신고제출일
@@ -16,17 +22,23 @@ public class DlsIssueReport extends GenericDartReport{
 	private int			totalIssueAmt; // 발행예정기간 중 모집, 매출 총액
 	private int			totalOutstandingAmt; // 실제발행액
 
+
 	public DlsIssueReport(ReportHeader header) {
 		super(header);
-		
 		dlsIssueList = new ArrayList<Dls>();
 		setTotalIssueAmt(0);
 	}
-	
+
 	public DlsIssueReport addDlsInfo (Dls dls){
-		dlsIssueList.add(dls);
+		if (dlsIssueList == null ) dlsIssueList = new ArrayList<Dls>();
+ 		dlsIssueList.add(dls);
 		return this;
 	}
+
+	public DlsIssueReport(String rcpNo) {
+		super(rcpNo);
+	}
+	public DlsIssueReport(){super();}
 
 	public List<Dls> getDlsIssueList() {
 		return dlsIssueList;

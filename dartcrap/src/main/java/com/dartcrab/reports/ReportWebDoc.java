@@ -38,8 +38,7 @@ public class ReportWebDoc {
 	}
 
 	public ReportHeader getHeader() {
-		return null;
-		//return header;
+		return header;
 	}
 
 	public String getContents() {

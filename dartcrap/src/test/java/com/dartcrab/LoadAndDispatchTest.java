@@ -8,6 +8,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
+import org.hibernate.*;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.ejb.HibernateEntityManager;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -149,7 +152,7 @@ public class LoadAndDispatchTest {
 		@SuppressWarnings("unchecked")
 		List<ReportHeader> headers = (List<ReportHeader>) em.createNativeQuery(
 				"select h.* from ReportHeader h left outer join ReportWebDoc d "
-				+ "on h.rcpNo = d.rcpNo where d.rcpNo is null", ReportHeader.class)
+				+ "on h.rcpNo = d.rcpNo where d.rcpNo is null and h.rptNm like '%주식매수%'", ReportHeader.class)
 				.getResultList();
 	
 		for (ReportHeader header : headers){
@@ -176,23 +179,33 @@ public class LoadAndDispatchTest {
 	@Test
 	public void extractInfo() throws Exception {
 
-		em.getTransaction().begin();
+		HibernateEntityManager hem = em.unwrap(HibernateEntityManager.class);
 		
+		Session session = hem.getSession();
 		
-		@SuppressWarnings("unchecked")
-		List<ReportWebDoc> docs = em.createQuery(
-				"select d from ReportWebDoc d", ReportWebDoc.class)
-				.getResultList();
-	
-		for (ReportWebDoc doc : docs){
+		ScrollableResults scrollableResult = session.createQuery("select d from ReportWebDoc d")
+												.setFetchSize(50)
+												.scroll(ScrollMode.FORWARD_ONLY);
+		
+		while (scrollableResult.next()){
+			ReportWebDoc doc = (ReportWebDoc) scrollableResult.get()[0];
+			
+			//TEMP
+			if (doc.getHeader().getRptNm().indexOf("주식매수선택") == -1 ) continue;
+			
+			log.info("Extracting: "+doc.getHeader().getRcpNo() + " " + doc.getHeader().getRptNm());
 			try{
-				ExtractorDispatcher.getInstance().dispatch(doc).extract();
-			}	catch (Exception e){
+				if(!em.getTransaction().isActive())
+					em.getTransaction().begin();
+				em.merge(ExtractorDispatcher.getInstance().dispatch(doc).extract());
+				em.getTransaction().commit();
+			} catch (Exception e){
 				e.printStackTrace();
-			}
-
+				em.getTransaction().rollback();
+			} 
+			session.evict(doc);
 		}	
-	
+		scrollableResult.close();
 	}
 	
 	// Private methods
