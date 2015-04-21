@@ -1,6 +1,5 @@
 package com.dartcrab.entities;
 
-import java.io.Serializable;
 import java.sql.Date;
 import java.util.List;
 import java.util.ArrayList;
@@ -13,18 +12,22 @@ import com.dartcrab.reports.ReportHeader;
 @Table
 @DiscriminatorValue("SO")
 public class StockOptionExecReport extends GenericDartReport{
+	
 	@Entity
-	private class ExecDetail implements Serializable{
-		/**
-		 * Generated SerialVersionId
-		 */
-		private static final long serialVersionUID = -8899198352637457834L;
+	private static class ExecDetail{
+
+		@SuppressWarnings("unused")
+		public ExecDetail() {
+			super();
+		}
+
+		@Id
+		@GeneratedValue(strategy=GenerationType.TABLE)
+		Long	execId;
 		
-		@Id
-		String	rcpNo;		
-		@Id
+		String	rcpNo;
+
 		Date	execDate;			// 행사일
-		
 		String	ownerName;			// 행사자명/법인명
 		String	relationship;		// 회사와의관계
 		float	execPrice;			// 행사가
@@ -189,6 +192,13 @@ public class StockOptionExecReport extends GenericDartReport{
 	public int getTreasuryStockRemainingUnits() {
 		return treasuryStockRemainingUnits;
 	}
+
+	
+	public StockOptionExecReport() {
+		super();
+	}
+
+
 
 	public void setTreasuryStockRemainingUnits(int treasuryStockRemainingUnits) {
 		this.treasuryStockRemainingUnits = treasuryStockRemainingUnits;

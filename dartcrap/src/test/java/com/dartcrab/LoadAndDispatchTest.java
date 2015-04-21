@@ -191,7 +191,10 @@ public class LoadAndDispatchTest {
 			ReportWebDoc doc = (ReportWebDoc) scrollableResult.get()[0];
 			
 			//TEMP
-			if (doc.getHeader().getRptNm().indexOf("주식매수선택") == -1 ) continue;
+			if (doc.getHeader().getRptNm().indexOf("주식매수선택") == -1 ) {
+				session.evict(doc);
+				continue;
+			}
 			
 			log.info("Extracting: "+doc.getHeader().getRcpNo() + " " + doc.getHeader().getRptNm());
 			try{
